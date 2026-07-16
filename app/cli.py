@@ -145,7 +145,10 @@ def cmd_export(args) -> int:
         uploader = SupabaseStorageUploader()
         for path in (result.discovery_archive, result.untouched_archive, result.full_archive):
             if path:
-                uploads.append(uploader.upload(path))
+                print(f"UPLOAD: sending {path.name} ({path.stat().st_size:,} bytes) to private Supabase Storage", flush=True)
+                uploaded = uploader.upload(path)
+                uploads.append(uploaded)
+                print(f"UPLOAD: completed {path.name}", flush=True)
     print(json.dumps({
         "status": "succeeded", "discovery_archive": str(result.discovery_archive),
         "untouched_archive": str(result.untouched_archive),

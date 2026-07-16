@@ -35,7 +35,15 @@ def request(
             retry_after = response.headers.get("Retry-After")
             wait = float(retry_after) if retry_after and retry_after.isdigit() else min(60.0, (2 ** attempt) + random.random())
             last_error = HttpError(f"HTTP {response.status_code}: {response.text[:500]}")
-        except (requests.Timeout, requests.ConnectionError, requests.HTTPError) as exc:
+        except requests.HTTPError as exc:
+            # Authentication, permission and missing-resource errors are not transient. Retrying
+            # them only delays the job and obscures the real cause.
+            status = exc.response.status_code if exc.response is not None else None
+            if status is not None and status not in retry_statuses:
+                raise HttpError(f"HTTP {status} from {url}: {exc.response.text[:500]}") from exc
+            last_error = exc
+            wait = min(60.0, (2 ** attempt) + random.random())
+        except (requests.Timeout, requests.ConnectionError) as exc:
             last_error = exc
             wait = min(60.0, (2 ** attempt) + random.random())
         if attempt < max_retries:

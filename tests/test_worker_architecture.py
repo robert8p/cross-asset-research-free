@@ -20,3 +20,10 @@ def test_worker_is_lightweight_at_import_boundary():
     assert 'import pandas' not in text
     assert 'import pyarrow' not in text
     assert 'subprocess.Popen' in text
+
+
+def test_worker_export_is_memory_conscious_and_restart_aware():
+    text = Path('app/worker.py').read_text()
+    assert '"export", "--no-full-archive"' in text
+    assert 'export_only' in text
+    assert "progress_percent >= 95" in text

@@ -58,19 +58,24 @@ class BundesbankAdapter(SourceAdapter):
         retrieved_at = datetime.now(timezone.utc)
         retrieval_vintage = retrieved_at.date()
         for _, item in df.iterrows():
-            if pd.isna(item[value_col]):
+            # Bundesbank SDMX-CSV may represent unavailable observations as "." or other
+            # non-numeric tokens. These are missing observations, not zero yields.
+            numeric_value = pd.to_numeric(pd.Series([item[value_col]]), errors="coerce").iloc[0]
+            observation_timestamp = pd.to_datetime(item[date_col], errors="coerce")
+            if pd.isna(numeric_value) or pd.isna(observation_timestamp):
                 continue
-            observation_date = pd.Timestamp(item[date_col]).date()
+            observation_date = observation_timestamp.date()
             # The public series response is a current historical snapshot and does not provide a
             # complete vintage history. Assign retrieval-time availability to prevent revised values
             # from leaking backwards into a historical research period.
+            value = float(numeric_value)
             rows.append({
                 "observation_timestamp_utc": retrieved_at, "observation_date": observation_date,
-                "maturity": str(maturity), "yield_value": float(item[value_col]),
+                "maturity": str(maturity), "yield_value": value,
                 "yield_type": instrument.get("yield_type", "estimated_zero_coupon"),
                 "source": self.provider, "source_series": full_code,
                 "published_at": retrieved_at, "vintage_date": retrieval_vintage,
-                "is_revised": retrieval_vintage > observation_date, "original_value": float(item[value_col]),
+                "is_revised": retrieval_vintage > observation_date, "original_value": value,
             })
         return FetchBatch(
             instrument["canonical_symbol"], self.provider, yields=pd.DataFrame(rows),

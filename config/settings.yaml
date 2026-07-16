@@ -46,6 +46,6 @@ exports:
   output_directory: exports
   csv_chunk_rows: 250000
   parquet_compression: zstd
-  create_full_archive: true
+  create_full_archive: false
   untouched_label: UNTOUCHED_TEST_DO_NOT_OPEN_DURING_DISCOVERY
   untouched_password_env: UNTOUCHED_ARCHIVE_PASSWORD

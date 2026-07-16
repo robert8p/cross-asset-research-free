@@ -73,19 +73,21 @@ def _steps(job_type: str) -> list[Step]:
             Step("Running a small two-day SPY test", 20, ["backfill", "--symbol", "SPY_SP500_PROXY", "--history-days", "2"]),
             Step("Collecting the complete 90-day dataset", 65, ["backfill"]),
             Step("Running discovery-period quality checks", 85, ["quality"]),
-            Step("Creating and securely uploading the archives", 95, ["export"]),
+            Step("Creating and securely uploading the archives", 95, ["export", "--no-full-archive"]),
         ]
     if job_type == "resume_backfill":
         return [
             Step("Resuming the complete historical collection", 55, ["backfill"]),
             Step("Running discovery-period quality checks", 85, ["quality"]),
-            Step("Creating and securely uploading the archives", 95, ["export"]),
+            Step("Creating and securely uploading the archives", 95, ["export", "--no-full-archive"]),
         ]
     if job_type == "quality_export":
         return [
             Step("Running discovery-period quality checks", 55, ["quality"]),
-            Step("Creating and securely uploading the archives", 90, ["export"]),
+            Step("Creating and securely uploading the archives", 90, ["export", "--no-full-archive"]),
         ]
+    if job_type == "export_only":
+        return [Step("Creating and securely uploading the archives", 90, ["export", "--no-full-archive"])]
     if job_type == "incremental":
         return [Step("Collecting the latest available observations", 50, ["incremental", "--history-days", "2"])]
     if job_type == "preflight":
@@ -139,8 +141,16 @@ def _recover_interrupted() -> None:
     with _connect() as conn:
         with conn.cursor() as cur:
             cur.execute(
-                """update control_jobs set status='queued', current_step='Resuming after worker restart',
-                   error_text=coalesce(error_text,'') || E'\\nWorker restarted; the job was safely requeued.'
+                """update control_jobs
+                   set status='queued',
+                       job_type = case
+                           when progress_percent >= 95 or current_step like 'Creating and securely uploading%' then 'export_only'
+                           when progress_percent >= 85 then 'quality_export'
+                           when progress_percent >= 20 then 'resume_backfill'
+                           else job_type
+                       end,
+                       current_step='Resuming safely after worker restart',
+                       error_text=coalesce(error_text,'') || E'\nWorker restarted; completed stages will not be repeated unnecessarily.'
                    where status='running'"""
             )
         conn.commit()

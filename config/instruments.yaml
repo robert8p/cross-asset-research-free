@@ -716,7 +716,7 @@ instruments:
     point-in-time FRED/ALFRED vintages and assigns conservative availability timestamps.
 - canonical_symbol: UK2Y_YIELD
   canonical_name: UK Government Nominal Spot Yield - 2 Year
-  enabled: true
+  enabled: false
   required: false
   asset_class: rates
   subcategory: official_yield
@@ -740,7 +740,7 @@ instruments:
     therefore prospective-only for leakage-safe research.
 - canonical_symbol: UK10Y_YIELD
   canonical_name: UK Government Nominal Spot Yield - 10 Year
-  enabled: true
+  enabled: false
   required: false
   asset_class: rates
   subcategory: official_yield
@@ -764,7 +764,7 @@ instruments:
     therefore prospective-only for leakage-safe research.
 - canonical_symbol: DE2Y_YIELD
   canonical_name: German Current Federal Treasury Note Yield - 2 Year
-  enabled: true
+  enabled: false
   required: false
   asset_class: rates
   subcategory: official_yield
@@ -788,7 +788,7 @@ instruments:
     therefore prospective-only for leakage-safe research.
 - canonical_symbol: DE10Y_YIELD
   canonical_name: German Current Federal Bond Yield - 10 Year
-  enabled: true
+  enabled: false
   required: false
   asset_class: rates
   subcategory: official_yield

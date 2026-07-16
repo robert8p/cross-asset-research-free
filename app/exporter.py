@@ -77,31 +77,48 @@ def determine_split(min_time: datetime, max_time: datetime, settings: dict[str, 
 
 
 def align_bars_without_fill(bars: pd.DataFrame, frequency: str = "5min") -> pd.DataFrame:
-    """Create explicit timestamp/instrument alignment slots with nulls; never forward-fill."""
+    """Create a compact timestamp/instrument alignment grid with nulls; never forward-fill.
+
+    The raw export already retains every source and catalogue field. Repeating those wide
+    string columns across every missing alignment slot is both redundant and memory-heavy.
+    The aligned file therefore contains only the fields needed for time-series research.
+    """
     if bars.empty:
         return bars.copy()
     required = {"canonical_symbol", "bar_open_timestamp_utc", "close"}
     missing = required - set(bars.columns)
     if missing:
         raise ValueError(f"Cannot align bars; missing columns: {sorted(missing)}")
-    raw = bars.copy()
+
+    research_columns = [
+        "bar_open_timestamp_utc", "canonical_symbol", "close", "volume", "vwap",
+        "trade_count", "session_type", "exchange_trading_date",
+        "is_regular_session", "is_extended_session",
+        "minutes_since_session_open", "minutes_until_session_close",
+        "day_of_week", "is_holiday", "is_shortened_session",
+    ]
+    selected = [column for column in research_columns if column in bars.columns]
+    raw = bars[selected].copy()
     raw["bar_open_timestamp_utc"] = pd.to_datetime(raw["bar_open_timestamp_utc"], utc=True)
-    symbols = sorted(raw["canonical_symbol"].dropna().unique())
+    symbols = sorted(raw["canonical_symbol"].dropna().astype(str).unique())
     grid_start = raw["bar_open_timestamp_utc"].min().floor(frequency)
     grid_end = raw["bar_open_timestamp_utc"].max().floor(frequency) + pd.Timedelta(frequency)
     grid = pd.date_range(grid_start, grid_end, freq=frequency, tz="UTC", inclusive="left")
     index = pd.MultiIndex.from_product([grid, symbols], names=["bar_open_timestamp_utc", "canonical_symbol"])
-    # Continuous and raw contracts may share a canonical timestamp; identity remains canonical-symbol-specific.
-    deduped = raw.sort_values("bar_open_timestamp_utc").drop_duplicates(["bar_open_timestamp_utc", "canonical_symbol"], keep="last")
+    deduped = raw.sort_values("bar_open_timestamp_utc").drop_duplicates(
+        ["bar_open_timestamp_utc", "canonical_symbol"], keep="last"
+    )
     aligned = deduped.set_index(["bar_open_timestamp_utc", "canonical_symbol"]).reindex(index).reset_index()
+    aligned["canonical_symbol"] = aligned["canonical_symbol"].astype("category")
+    if "session_type" in aligned.columns:
+        aligned["session_type"] = aligned["session_type"].astype("category")
     aligned["is_observed"] = aligned["close"].notna()
     aligned["is_missing_slot"] = ~aligned["is_observed"]
-    aligned["prior_timestamp"] = aligned.groupby("canonical_symbol")["bar_open_timestamp_utc"].shift()
-    aligned["prior_close"] = aligned.groupby("canonical_symbol")["close"].shift()
-    exactly_adjacent = (aligned["bar_open_timestamp_utc"] - aligned["prior_timestamp"]) == pd.Timedelta(frequency)
-    both_observed = aligned["close"].notna() & aligned["prior_close"].notna()
-    aligned["return_5m"] = np.where(exactly_adjacent & both_observed, aligned["close"] / aligned["prior_close"] - 1.0, np.nan)
-    aligned.drop(columns=["prior_timestamp", "prior_close"], inplace=True)
+    prior_timestamp = aligned.groupby("canonical_symbol", observed=True)["bar_open_timestamp_utc"].shift()
+    prior_close = aligned.groupby("canonical_symbol", observed=True)["close"].shift()
+    exactly_adjacent = (aligned["bar_open_timestamp_utc"] - prior_timestamp) == pd.Timedelta(frequency)
+    both_observed = aligned["close"].notna() & prior_close.notna()
+    aligned["return_5m"] = np.where(exactly_adjacent & both_observed, aligned["close"] / prior_close - 1.0, np.nan)
     return aligned
 
 
@@ -297,6 +314,7 @@ class Exporter:
         full_zip = self.output_root / f"cross_asset_FULL_RESTRICTED_ARCHIVE_{stamp}.zip"
         include_full = self.config.settings["exports"].get("create_full_archive", True) if include_full_archive is None else include_full_archive
 
+        print("EXPORT: preparing temporary workspace", flush=True)
         with tempfile.TemporaryDirectory() as temporary:
             temp = Path(temporary)
             discovery_dir = temp / "discovery"
@@ -305,6 +323,7 @@ class Exporter:
             discovery_dir.mkdir(); untouched_dir.mkdir();
             if include_full: full_dir.mkdir()
 
+            print("EXPORT: loading discovery-period data", flush=True)
             instruments = self._query_instruments()
             discovery_bars = self._query_bars(split.discovery_start, split.discovery_end)
             discovery_yields = self._query_yields(split.discovery_start, split.discovery_end)
@@ -323,12 +342,16 @@ class Exporter:
                 ).reset_index()
                 sessions["source"] = "observed_session_envelope_not_official_calendar"
 
+            print(f"EXPORT: discovery bars loaded ({len(discovery_bars):,} rows); running discovery-only checks", flush=True)
             bar_quality = evaluate_bars(discovery_bars, instruments, self.config.settings, coverage_start=split.discovery_start, coverage_end_exclusive=split.discovery_end)
             yield_issues = evaluate_yields(discovery_yields)
             quality_results = pd.concat([bar_quality.issues, yield_issues], ignore_index=True, sort=False)
+            print("EXPORT: building compact aligned research dataset", flush=True)
             aligned = align_bars_without_fill(discovery_bars, self.config.settings["alignment"].get("grid_frequency", "5min"))
+            print(f"EXPORT: aligned dataset built ({len(aligned):,} rows)", flush=True)
             curve_features = build_curve_features(discovery_yields)
 
+            print("EXPORT: writing discovery files", flush=True)
             self._write_parquet(discovery_bars, discovery_dir / "bars_raw.parquet")
             self._write_parquet(aligned, discovery_dir / "bars_research_aligned.parquet")
             self._write_parquet(discovery_yields, discovery_dir / "yields.parquet")
@@ -384,13 +407,16 @@ class Exporter:
             }
             (discovery_dir / "export_manifest.json").write_text(json.dumps(manifest, indent=2, default=str), encoding="utf-8")
             self._write_hashes(discovery_dir)
+            print("EXPORT: compressing discovery archive", flush=True)
             self._zip(discovery_dir, discovery_zip)
+            print(f"EXPORT: discovery archive ready ({discovery_zip.stat().st_size:,} bytes)", flush=True)
 
             del discovery_bars, discovery_yields, rolls, sessions, bar_quality, yield_issues
             del quality_results, aligned, curve_features, heatmap, discovery_counts
             gc.collect()
 
             # The untouched query is isolated and receives structural serialization only.
+            print("EXPORT: serialising untouched period without profiling", flush=True)
             untouched_bars = self._query_bars(split.untouched_start, split.untouched_end)
             untouched_yields = self._query_yields(split.untouched_start, split.untouched_end)
             self._write_parquet(untouched_bars, untouched_dir / "bars_raw_UNTOUCHED.parquet")
@@ -420,10 +446,12 @@ or per-instrument counts on these observations.
             self._write_hashes(untouched_dir)
             password = os.getenv(self.config.settings["exports"].get("untouched_password_env", "UNTOUCHED_ARCHIVE_PASSWORD"))
             self._zip(untouched_dir, untouched_zip, password=password)
+            print(f"EXPORT: untouched archive ready ({untouched_zip.stat().st_size:,} bytes)", flush=True)
             del untouched_bars, untouched_yields
             gc.collect()
 
             if include_full:
+                print("EXPORT: creating optional full restricted archive", flush=True)
                 full_bars = self._query_bars(split.dataset_start, split.untouched_end)
                 full_yields = self._query_yields(split.dataset_start, split.untouched_end)
                 full_rolls = self.db.read_dataframe("""select r.*, i.canonical_symbol from futures_rolls r
@@ -441,6 +469,7 @@ or per-instrument counts on these observations.
                 (full_dir / "README_RESTRICTED.md").write_text("Restricted backup only. Do not use during discovery because it contains the untouched period.\n", encoding="utf-8")
                 self._write_hashes(full_dir)
                 self._zip(full_dir, full_zip, password=password)
+                print(f"EXPORT: full restricted archive ready ({full_zip.stat().st_size:,} bytes)", flush=True)
                 del full_bars, full_yields, full_rolls, full_sessions
                 gc.collect()
 

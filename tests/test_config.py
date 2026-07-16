@@ -3,7 +3,7 @@ from app.config import load_config
 
 def test_catalogue_has_free_proxy_universe_and_unique_symbols():
     config = load_config()
-    symbols = [x["canonical_symbol"] for x in config.enabled_instruments]
+    symbols = [x["canonical_symbol"] for x in config.instruments]
     assert len(symbols) == len(set(symbols))
     required = {
         "USO_WTI_PROXY", "BNO_BRENT_PROXY", "GLD_GOLD_PROXY", "SLV_SILVER_PROXY", "BTC_USD_SPOT",
