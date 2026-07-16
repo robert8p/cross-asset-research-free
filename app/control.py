@@ -90,16 +90,6 @@ def bootstrap() -> dict[str, Any]:
         set_setting(db, "RESEARCH_DATASET_END_UTC", end.isoformat())
         settings = get_settings(db)
 
-    # A previous instance may have stopped in the middle of a job. Checkpoints make reruns safe.
-    with db.connection() as conn:
-        with conn.cursor() as cur:
-            cur.execute(
-                """update control_jobs set status='failed', ended_at=now(),
-                   error_text=coalesce(error_text,'') || E'\nService restarted before completion. Click Resume; completed data will not duplicate.'
-                   where status='running'"""
-            )
-        conn.commit()
-
     return {"database": db.ping(), "settings": settings}
 
 

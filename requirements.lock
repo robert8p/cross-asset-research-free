@@ -10,8 +10,6 @@ attrs==26.1.0
 certifi==2026.6.17
 charset-normalizer==3.4.9
 click==8.4.2
-databento-dbn==0.62.0
-databento==0.81.0
 et_xmlfile==2.0.0
 exchange_calendars==4.13.2
 fastapi==0.128.2

@@ -1,3 +1,5 @@
+> **v1.3 note:** Long-running collection now runs in a separate Render background worker. See `WORKER_FIX.md`.
+
 # No-code deployment: the six-step version
 
 You will never touch the code or run a command.

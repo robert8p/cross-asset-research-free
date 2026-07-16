@@ -1,3 +1,5 @@
+> **v1.3 note:** Long-running collection now runs in a separate Render background worker. See `WORKER_FIX.md`.
+
 # Build and integrity report — No-Code Free-Data Edition
 
 ## Build verdict

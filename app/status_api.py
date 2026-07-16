@@ -12,7 +12,7 @@ from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 
-from .control import RUNNER, bootstrap, create_job, get_settings, latest_discovery_object, latest_jobs, signed_discovery_url
+from .control import bootstrap, create_job, get_settings, latest_discovery_object, latest_jobs, signed_discovery_url
 from .db import Database
 
 security = HTTPBasic()
@@ -43,7 +43,7 @@ async def lifespan(_: FastAPI):
     yield
 
 
-app = FastAPI(title="Cross-Asset Research — No-Code Dashboard", version="1.2.1-no-code-healthfix", lifespan=lifespan)
+app = FastAPI(title="Cross-Asset Research — No-Code Dashboard", version="1.3.0-worker", lifespan=lifespan)
 
 
 @app.get("/health")
@@ -255,40 +255,35 @@ h1{{font-size:38px;letter-spacing:-.04em;margin:5px 0 8px}} h2{{font-size:20px;m
 @app.post("/run/full-setup")
 def run_full(_: str = Depends(_auth)):
     db = Database(os.getenv("SUPABASE_DB_URL"))
-    job_id = create_job(db, "full_setup")
-    RUNNER.start(job_id)
+    create_job(db, "full_setup")
     return RedirectResponse(url="/", status_code=303)
 
 
 @app.post("/run/resume")
 def run_resume(_: str = Depends(_auth)):
     db = Database(os.getenv("SUPABASE_DB_URL"))
-    job_id = create_job(db, "resume_backfill")
-    RUNNER.start(job_id)
+    create_job(db, "resume_backfill")
     return RedirectResponse(url="/", status_code=303)
 
 
 @app.post("/run/quality-export")
 def run_quality_export(_: str = Depends(_auth)):
     db = Database(os.getenv("SUPABASE_DB_URL"))
-    job_id = create_job(db, "quality_export")
-    RUNNER.start(job_id)
+    create_job(db, "quality_export")
     return RedirectResponse(url="/", status_code=303)
 
 
 @app.post("/run/incremental")
 def run_incremental(_: str = Depends(_auth)):
     db = Database(os.getenv("SUPABASE_DB_URL"))
-    job_id = create_job(db, "incremental")
-    RUNNER.start(job_id)
+    create_job(db, "incremental")
     return RedirectResponse(url="/", status_code=303)
 
 
 @app.post("/run/preflight")
 def run_preflight(_: str = Depends(_auth)):
     db = Database(os.getenv("SUPABASE_DB_URL"))
-    job_id = create_job(db, "preflight")
-    RUNNER.start(job_id)
+    create_job(db, "preflight")
     return RedirectResponse(url="/", status_code=303)
 
 

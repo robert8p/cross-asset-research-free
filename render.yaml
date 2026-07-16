@@ -9,6 +9,8 @@ services:
     healthCheckPath: /health
     maxShutdownDelaySeconds: 300
     envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.11
       - key: SUPABASE_DB_URL
         sync: false
       - key: SUPABASE_SERVICE_ROLE_KEY
@@ -23,6 +25,61 @@ services:
         sync: false
       - key: SESSION_SECRET
         generateValue: true
+      - key: ALPACA_FEED
+        value: iex
+      - key: SUPABASE_STORAGE_UPLOAD
+        value: "true"
+      - key: SUPABASE_STORAGE_BUCKET
+        value: cross-asset-research-exports
+      - key: LOG_LEVEL
+        value: INFO
+
+  - type: worker
+    name: cross-asset-research-worker
+    runtime: python
+    plan: starter
+    region: frankfurt
+    buildCommand: pip install -r requirements.lock
+    startCommand: python -m app.worker
+    maxShutdownDelaySeconds: 300
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.11
+      - key: SUPABASE_DB_URL
+        fromService:
+          name: cross-asset-research-dashboard
+          type: web
+          envVarKey: SUPABASE_DB_URL
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        fromService:
+          name: cross-asset-research-dashboard
+          type: web
+          envVarKey: SUPABASE_SERVICE_ROLE_KEY
+      - key: ALPACA_API_KEY
+        fromService:
+          name: cross-asset-research-dashboard
+          type: web
+          envVarKey: ALPACA_API_KEY
+      - key: ALPACA_SECRET_KEY
+        fromService:
+          name: cross-asset-research-dashboard
+          type: web
+          envVarKey: ALPACA_SECRET_KEY
+      - key: FRED_API_KEY
+        fromService:
+          name: cross-asset-research-dashboard
+          type: web
+          envVarKey: FRED_API_KEY
+      - key: DASHBOARD_PASSWORD
+        fromService:
+          name: cross-asset-research-dashboard
+          type: web
+          envVarKey: DASHBOARD_PASSWORD
+      - key: UNTOUCHED_ARCHIVE_PASSWORD
+        fromService:
+          name: cross-asset-research-dashboard
+          type: web
+          envVarKey: DASHBOARD_PASSWORD
       - key: ALPACA_FEED
         value: iex
       - key: SUPABASE_STORAGE_UPLOAD

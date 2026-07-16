@@ -1,3 +1,5 @@
+> **v1.3 note:** Long-running collection now runs in a separate Render background worker. See `WORKER_FIX.md`.
+
 # Cross-Asset Research Collector — No-Code Edition
 
 This edition is designed for a non-technical user.
