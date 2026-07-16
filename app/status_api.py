@@ -43,11 +43,27 @@ async def lifespan(_: FastAPI):
     yield
 
 
-app = FastAPI(title="Cross-Asset Research — No-Code Dashboard", version="1.2.0-no-code", lifespan=lifespan)
+app = FastAPI(title="Cross-Asset Research — No-Code Dashboard", version="1.2.1-no-code-healthfix", lifespan=lifespan)
 
 
 @app.get("/health")
 def health():
+    """Render liveness check: report whether the web process is running.
+
+    Database readiness is intentionally reported separately. A missing or invalid
+    database setting must not trap the deployment in a health-check loop, because
+    the dashboard is the place where a non-technical user can see and correct it.
+    """
+    return {
+        "ok": True,
+        "service": "cross-asset-research-dashboard",
+        "ready": BOOTSTRAP_ERROR is None,
+    }
+
+
+@app.get("/ready")
+def ready():
+    """Detailed readiness check for diagnostics; not used as Render's liveness check."""
     if BOOTSTRAP_ERROR:
         return JSONResponse(status_code=503, content={"ok": False, "error": BOOTSTRAP_ERROR})
     try:
