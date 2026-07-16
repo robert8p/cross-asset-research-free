@@ -1,0 +1,51 @@
+project:
+  name: cross_asset_intraday_leading_indicator_research
+  version: 1.1.0-free-data
+  default_history_days: 90
+  preferred_history_days: 180
+  untouched_test_days: 30
+  minimum_untouched_fraction: 0.2
+  bar_interval: 5m
+  strict_required_instruments: true
+collection:
+  request_timeout_seconds: 45
+  max_retries: 5
+  backoff_min_seconds: 1
+  backoff_max_seconds: 60
+  database_batch_rows: 50000
+  api_chunk_days_databento: 14
+  api_chunk_candles_coinbase: 300
+  pipeline_chunk_days_default: 14
+  pipeline_chunk_days_by_provider:
+    databento: 14
+    coinbase: 7
+    twelve_data: 7
+    fred: 180
+    boe_yield_curve: 180
+    bundesbank: 180
+    alpaca: 30
+  incremental_overlap_minutes: 30
+  dry_run: false
+  api_chunk_days_alpaca: 30
+alignment:
+  grid_frequency: 5min
+  timestamp_convention: bar_open
+  carry_forward_across_open_market_gaps: false
+  carry_forward_across_market_closures: false
+  closed_market_return_is_zero: false
+  include_missingness_flags: true
+  maximum_staleness_minutes: 0
+quality:
+  stale_run_bars: 12
+  extreme_return_abs_threshold: 0.1
+  zero_volume_run_bars: 24
+  require_ohlc_consistency: true
+  flag_weekends_for_non_247: true
+  fail_on_required_instrument_empty: true
+exports:
+  output_directory: exports
+  csv_chunk_rows: 250000
+  parquet_compression: zstd
+  create_full_archive: true
+  untouched_label: UNTOUCHED_TEST_DO_NOT_OPEN_DURING_DISCOVERY
+  untouched_password_env: UNTOUCHED_ARCHIVE_PASSWORD

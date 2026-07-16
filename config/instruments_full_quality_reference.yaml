@@ -1,0 +1,926 @@
+version: 1
+instruments:
+- canonical_symbol: WTI_FUT_CONT
+  canonical_name: WTI Crude Oil Futures - Volume-Based Front Contract
+  enabled: true
+  required: true
+  asset_class: commodity
+  subcategory: energy
+  instrument_type: continuous_future
+  economic_exposure: West Texas Intermediate crude oil
+  provider: databento
+  provider_symbol: CL.v.0
+  dataset: GLBX.MDP3
+  stype_in: continuous
+  exchange: NYMEX
+  exchange_timezone: America/Chicago
+  currency: USD
+  price_unit: USD_per_barrel
+  contract_multiplier: 1000
+  is_continuous: true
+  continuous_method: volume_based_unadjusted
+  volume_type: genuine
+  data_frequency: 5m_from_1m
+  normal_session: 17:00-16:00 CT, Sunday-Friday, daily maintenance break
+  extended_session: Globex session
+  data_licence: Databento licensed exchange data; internal research only unless separately
+    entitled
+  redistribution_restrictions: Do not redistribute raw exchange data
+  methodological_limitations: Roll gaps remain because the continuous series is unadjusted
+  session_calendar: CMEGlobex_CL
+  session_calendar_role: configured normal session; observed valid-date bars outside
+    are extended
+  session_calendar_limitations: Calendar rules are version-locked and must be checked
+    against the provider/product calendar during preflight; later exchange corrections
+    require a dependency update.
+- canonical_symbol: BRENT_FUT_CONT
+  canonical_name: Brent Crude Oil Futures - Volume-Based Front Contract
+  enabled: true
+  required: true
+  asset_class: commodity
+  subcategory: energy
+  instrument_type: continuous_future
+  economic_exposure: ICE Brent crude oil
+  provider: databento
+  provider_symbol: BRN.v.0
+  dataset: IFEU.IMPACT
+  stype_in: continuous
+  exchange: ICE Futures Europe
+  exchange_timezone: Europe/London
+  currency: USD
+  price_unit: USD_per_barrel
+  contract_multiplier: 1000
+  is_continuous: true
+  continuous_method: volume_based_unadjusted
+  volume_type: genuine
+  data_frequency: 5m_from_1m
+  normal_session: ICE electronic session; verify product calendar
+  extended_session: ICE electronic session
+  data_licence: Databento/ICE licensed data; internal research only unless separately
+    entitled
+  redistribution_restrictions: Do not redistribute raw exchange data
+  methodological_limitations: Product symbol and entitlement are verified at preflight;
+    roll gaps remain unadjusted
+  session_calendar: ICE
+  session_calendar_role: configured normal session; observed valid-date bars outside
+    are extended
+  session_calendar_limitations: Calendar rules are version-locked and must be checked
+    against the provider/product calendar during preflight; later exchange corrections
+    require a dependency update.
+- canonical_symbol: GOLD_FUT_CONT
+  canonical_name: COMEX Gold Futures - Volume-Based Front Contract
+  enabled: true
+  required: true
+  asset_class: commodity
+  subcategory: precious_metals
+  instrument_type: continuous_future
+  economic_exposure: Gold
+  provider: databento
+  provider_symbol: GC.v.0
+  dataset: GLBX.MDP3
+  stype_in: continuous
+  exchange: COMEX
+  exchange_timezone: America/Chicago
+  currency: USD
+  price_unit: USD_per_troy_ounce
+  contract_multiplier: 100
+  is_continuous: true
+  continuous_method: volume_based_unadjusted
+  volume_type: genuine
+  data_frequency: 5m_from_1m
+  normal_session: 17:00-16:00 CT, Sunday-Friday, daily maintenance break
+  extended_session: Globex session
+  data_licence: Databento licensed exchange data; internal research only
+  redistribution_restrictions: Do not redistribute raw exchange data
+  methodological_limitations: Unadjusted roll gaps
+  session_calendar: GC
+  session_calendar_role: configured normal session; observed valid-date bars outside
+    are extended
+  session_calendar_limitations: Calendar rules are version-locked and must be checked
+    against the provider/product calendar during preflight; later exchange corrections
+    require a dependency update.
+- canonical_symbol: SILVER_FUT_CONT
+  canonical_name: COMEX Silver Futures - Volume-Based Front Contract
+  enabled: true
+  required: true
+  asset_class: commodity
+  subcategory: precious_metals
+  instrument_type: continuous_future
+  economic_exposure: Silver
+  provider: databento
+  provider_symbol: SI.v.0
+  dataset: GLBX.MDP3
+  stype_in: continuous
+  exchange: COMEX
+  exchange_timezone: America/Chicago
+  currency: USD
+  price_unit: USD_per_troy_ounce
+  contract_multiplier: 5000
+  is_continuous: true
+  continuous_method: volume_based_unadjusted
+  volume_type: genuine
+  data_frequency: 5m_from_1m
+  normal_session: 17:00-16:00 CT, Sunday-Friday, daily maintenance break
+  extended_session: Globex session
+  data_licence: Databento licensed exchange data; internal research only
+  redistribution_restrictions: Do not redistribute raw exchange data
+  methodological_limitations: Unadjusted roll gaps
+  session_calendar: SI
+  session_calendar_role: configured normal session; observed valid-date bars outside
+    are extended
+  session_calendar_limitations: Calendar rules are version-locked and must be checked
+    against the provider/product calendar during preflight; later exchange corrections
+    require a dependency update.
+- canonical_symbol: BTC_USD_SPOT
+  canonical_name: Bitcoin / US Dollar Spot - Coinbase Exchange
+  enabled: true
+  required: true
+  asset_class: cryptocurrency
+  subcategory: spot
+  instrument_type: spot
+  economic_exposure: Bitcoin quoted in US dollars on Coinbase Exchange only
+  provider: coinbase
+  provider_symbol: BTC-USD
+  exchange: Coinbase Exchange
+  exchange_timezone: UTC
+  currency: USD
+  price_unit: USD_per_BTC
+  is_continuous: false
+  volume_type: genuine
+  data_frequency: 5m_native
+  normal_session: 24/7
+  extended_session: 24/7
+  data_licence: Coinbase API terms apply
+  redistribution_restrictions: Confirm intended use under Coinbase terms before redistribution
+  methodological_limitations: Single-venue price; candles can omit intervals with
+    no trades
+  session_calendar: 24/7
+  session_calendar_role: configured normal session; observed valid-date bars outside
+    are extended
+  session_calendar_limitations: Calendar rules are version-locked and must be checked
+    against the provider/product calendar during preflight; later exchange corrections
+    require a dependency update.
+- canonical_symbol: SP500_FUT_CONT
+  canonical_name: E-mini S&P 500 Futures - Volume-Based Front Contract
+  enabled: true
+  required: true
+  asset_class: equity_index
+  subcategory: us_large_cap
+  instrument_type: continuous_future
+  economic_exposure: S&P 500
+  provider: databento
+  provider_symbol: ES.v.0
+  dataset: GLBX.MDP3
+  stype_in: continuous
+  exchange: CME
+  exchange_timezone: America/Chicago
+  currency: USD
+  price_unit: index_points
+  contract_multiplier: 50
+  is_continuous: true
+  continuous_method: volume_based_unadjusted
+  volume_type: genuine
+  data_frequency: 5m_from_1m
+  normal_session: Globex nearly 23 hours; daily maintenance break
+  extended_session: Globex session
+  data_licence: Databento/CME licensed data; internal research only
+  redistribution_restrictions: Do not redistribute raw exchange data
+  methodological_limitations: Futures basis and roll effects; not the cash index
+  session_calendar: CME_Equity
+  session_calendar_role: configured normal session; observed valid-date bars outside
+    are extended
+  session_calendar_limitations: Calendar rules are version-locked and must be checked
+    against the provider/product calendar during preflight; later exchange corrections
+    require a dependency update.
+- canonical_symbol: NASDAQ100_FUT_CONT
+  canonical_name: E-mini Nasdaq-100 Futures - Volume-Based Front Contract
+  enabled: true
+  required: true
+  asset_class: equity_index
+  subcategory: us_technology
+  instrument_type: continuous_future
+  economic_exposure: Nasdaq 100
+  provider: databento
+  provider_symbol: NQ.v.0
+  dataset: GLBX.MDP3
+  stype_in: continuous
+  exchange: CME
+  exchange_timezone: America/Chicago
+  currency: USD
+  price_unit: index_points
+  contract_multiplier: 20
+  is_continuous: true
+  continuous_method: volume_based_unadjusted
+  volume_type: genuine
+  data_frequency: 5m_from_1m
+  normal_session: Globex nearly 23 hours; daily maintenance break
+  extended_session: Globex session
+  data_licence: Databento/CME licensed data; internal research only
+  redistribution_restrictions: Do not redistribute raw exchange data
+  methodological_limitations: Futures basis and roll effects; not the cash index
+  session_calendar: CME_Equity
+  session_calendar_role: configured normal session; observed valid-date bars outside
+    are extended
+  session_calendar_limitations: Calendar rules are version-locked and must be checked
+    against the provider/product calendar during preflight; later exchange corrections
+    require a dependency update.
+- canonical_symbol: DOW_FUT_CONT
+  canonical_name: E-mini Dow Futures - Volume-Based Front Contract
+  enabled: true
+  required: true
+  asset_class: equity_index
+  subcategory: us_blue_chip
+  instrument_type: continuous_future
+  economic_exposure: Dow Jones Industrial Average
+  provider: databento
+  provider_symbol: YM.v.0
+  dataset: GLBX.MDP3
+  stype_in: continuous
+  exchange: CBOT
+  exchange_timezone: America/Chicago
+  currency: USD
+  price_unit: index_points
+  contract_multiplier: 5
+  is_continuous: true
+  continuous_method: volume_based_unadjusted
+  volume_type: genuine
+  data_frequency: 5m_from_1m
+  normal_session: Globex nearly 23 hours; daily maintenance break
+  extended_session: Globex session
+  data_licence: Databento/CBOT licensed data; internal research only
+  redistribution_restrictions: Do not redistribute raw exchange data
+  methodological_limitations: Futures basis and roll effects; not the cash index
+  session_calendar: CBOT_Equity
+  session_calendar_role: configured normal session; observed valid-date bars outside
+    are extended
+  session_calendar_limitations: Calendar rules are version-locked and must be checked
+    against the provider/product calendar during preflight; later exchange corrections
+    require a dependency update.
+- canonical_symbol: RUSSELL2000_FUT_CONT
+  canonical_name: E-mini Russell 2000 Futures - Volume-Based Front Contract
+  enabled: true
+  required: true
+  asset_class: equity_index
+  subcategory: us_small_cap
+  instrument_type: continuous_future
+  economic_exposure: Russell 2000
+  provider: databento
+  provider_symbol: RTY.v.0
+  dataset: GLBX.MDP3
+  stype_in: continuous
+  exchange: CME
+  exchange_timezone: America/Chicago
+  currency: USD
+  price_unit: index_points
+  contract_multiplier: 50
+  is_continuous: true
+  continuous_method: volume_based_unadjusted
+  volume_type: genuine
+  data_frequency: 5m_from_1m
+  normal_session: Globex nearly 23 hours; daily maintenance break
+  extended_session: Globex session
+  data_licence: Databento/CME licensed data; internal research only
+  redistribution_restrictions: Do not redistribute raw exchange data
+  methodological_limitations: Futures basis and roll effects; not the cash index
+  session_calendar: CME_Equity
+  session_calendar_role: configured normal session; observed valid-date bars outside
+    are extended
+  session_calendar_limitations: Calendar rules are version-locked and must be checked
+    against the provider/product calendar during preflight; later exchange corrections
+    require a dependency update.
+- canonical_symbol: VIX_FUT_CONT
+  canonical_name: Cboe VIX Futures - Volume-Based Front Contract
+  enabled: true
+  required: true
+  asset_class: volatility
+  subcategory: implied_volatility
+  instrument_type: continuous_future
+  economic_exposure: Cboe VIX futures, not spot VIX
+  provider: databento
+  provider_symbol: VX.v.0
+  dataset: XCBF.PITCH
+  stype_in: continuous
+  exchange: CFE
+  exchange_timezone: America/Chicago
+  currency: USD
+  price_unit: volatility_points
+  contract_multiplier: 1000
+  is_continuous: true
+  continuous_method: volume_based_unadjusted
+  volume_type: genuine
+  data_frequency: 5m_from_1m
+  normal_session: CFE extended session; verify product calendar
+  extended_session: CFE extended session
+  data_licence: Databento/CFE licensed data; internal research only
+  redistribution_restrictions: Do not redistribute raw exchange data
+  methodological_limitations: VIX futures can differ materially from spot VIX because
+    of term structure
+  session_calendar: CFE
+  session_calendar_role: configured normal session; observed valid-date bars outside
+    are extended
+  session_calendar_limitations: Calendar rules are version-locked and must be checked
+    against the provider/product calendar during preflight; later exchange corrections
+    require a dependency update.
+  trading_date_roll_time_local: '17:00'
+- canonical_symbol: VIX_CASH_INDEX
+  canonical_name: Cboe Volatility Index (VIX) Cash Index
+  enabled: true
+  required: true
+  asset_class: volatility
+  subcategory: implied_volatility
+  instrument_type: cash_index
+  economic_exposure: Cboe VIX cash index calculation
+  provider: twelve_data
+  provider_symbol: VIX
+  exchange: Cboe cash index
+  exchange_timezone: America/Chicago
+  currency: USD
+  price_unit: volatility_points
+  is_continuous: false
+  volume_type: unavailable
+  data_frequency: 5m_provider_index_value
+  normal_session: Cboe index dissemination session; verify provider timestamp coverage
+  extended_session: Provider-dependent; not assumed equivalent to VIX futures
+  data_licence: Twelve Data terms and relevant index-data entitlements apply
+  redistribution_restrictions: Personal/internal analysis only unless separately licensed
+  methodological_limitations: No genuine traded volume; index values and VIX futures
+    are separate instruments; plan entitlement and 90-day five-minute history must
+    pass preflight.
+  session_calendar: CBOE_Index_Options
+  session_calendar_role: configured normal session; observed valid-date bars outside
+    are extended
+  session_calendar_limitations: Calendar rules are version-locked and must be checked
+    against the provider/product calendar during preflight; later exchange corrections
+    require a dependency update.
+- canonical_symbol: FTSE100_FUT_CONT
+  canonical_name: FTSE 100 Index Futures - Volume-Based Front Contract
+  enabled: true
+  required: true
+  asset_class: equity_index
+  subcategory: uk_large_cap
+  instrument_type: continuous_future
+  economic_exposure: FTSE 100
+  provider: databento
+  provider_symbol: Z.v.0
+  dataset: IFLL.IMPACT
+  stype_in: continuous
+  exchange: ICE Europe Financials
+  exchange_timezone: Europe/London
+  currency: GBP
+  price_unit: index_points
+  contract_multiplier: 10
+  is_continuous: true
+  continuous_method: volume_based_unadjusted
+  volume_type: genuine
+  data_frequency: 5m_from_1m
+  normal_session: ICE session; verify product calendar
+  extended_session: ICE session
+  data_licence: Databento/ICE licensed data; internal research only
+  redistribution_restrictions: Do not redistribute raw exchange data
+  methodological_limitations: Provider symbol is verified by the preflight symbol-resolution
+    check; futures basis and rolls apply
+  session_calendar: ICE
+  session_calendar_role: configured normal session; observed valid-date bars outside
+    are extended
+  session_calendar_limitations: Calendar rules are version-locked and must be checked
+    against the provider/product calendar during preflight; later exchange corrections
+    require a dependency update.
+- canonical_symbol: DAX40_FUT_CONT
+  canonical_name: DAX Futures - Volume-Based Front Contract
+  enabled: true
+  required: true
+  asset_class: equity_index
+  subcategory: germany_large_cap
+  instrument_type: continuous_future
+  economic_exposure: DAX 40
+  provider: databento
+  provider_symbol: FDAX.v.0
+  dataset: XEUR.EOBI
+  stype_in: continuous
+  exchange: Eurex
+  exchange_timezone: Europe/Berlin
+  currency: EUR
+  price_unit: index_points
+  contract_multiplier: 25
+  is_continuous: true
+  continuous_method: volume_based_unadjusted
+  volume_type: genuine
+  data_frequency: 5m_from_1m
+  normal_session: Eurex regular and extended trading hours
+  extended_session: Eurex Asian and US hours where available
+  data_licence: Databento/Eurex licensed data; internal research only
+  redistribution_restrictions: Do not redistribute raw exchange data
+  methodological_limitations: Full-size contract may be less liquid than mini during
+    some periods; preflight checks mapping
+  session_calendar: EUREX
+  session_calendar_role: configured normal session; observed valid-date bars outside
+    are extended
+  session_calendar_limitations: Calendar rules are version-locked and must be checked
+    against the provider/product calendar during preflight; later exchange corrections
+    require a dependency update.
+- canonical_symbol: EUROSTOXX50_FUT_CONT
+  canonical_name: EURO STOXX 50 Futures - Volume-Based Front Contract
+  enabled: true
+  required: true
+  asset_class: equity_index
+  subcategory: eurozone_large_cap
+  instrument_type: continuous_future
+  economic_exposure: EURO STOXX 50
+  provider: databento
+  provider_symbol: FESX.v.0
+  dataset: XEUR.EOBI
+  stype_in: continuous
+  exchange: Eurex
+  exchange_timezone: Europe/Berlin
+  currency: EUR
+  price_unit: index_points
+  contract_multiplier: 10
+  is_continuous: true
+  continuous_method: volume_based_unadjusted
+  volume_type: genuine
+  data_frequency: 5m_from_1m
+  normal_session: Eurex regular and extended trading hours
+  extended_session: Eurex Asian and US hours where available
+  data_licence: Databento/Eurex licensed data; internal research only
+  redistribution_restrictions: Do not redistribute raw exchange data
+  methodological_limitations: Futures basis and roll effects; not the cash index
+  session_calendar: EUREX
+  session_calendar_role: configured normal session; observed valid-date bars outside
+    are extended
+  session_calendar_limitations: Calendar rules are version-locked and must be checked
+    against the provider/product calendar during preflight; later exchange corrections
+    require a dependency update.
+- canonical_symbol: NIKKEI225_USD_FUT_CONT
+  canonical_name: CME Nikkei 225 USD Futures - Volume-Based Front Contract
+  enabled: true
+  required: true
+  asset_class: equity_index
+  subcategory: japan_large_cap
+  instrument_type: continuous_future
+  economic_exposure: Nikkei 225, USD-denominated CME contract
+  provider: databento
+  provider_symbol: NKD.v.0
+  dataset: GLBX.MDP3
+  stype_in: continuous
+  exchange: CME
+  exchange_timezone: America/Chicago
+  currency: USD
+  price_unit: index_points
+  contract_multiplier: 5
+  is_continuous: true
+  continuous_method: volume_based_unadjusted
+  volume_type: genuine
+  data_frequency: 5m_from_1m
+  normal_session: Globex session
+  extended_session: Globex session
+  data_licence: Databento/CME licensed data; internal research only
+  redistribution_restrictions: Do not redistribute raw exchange data
+  methodological_limitations: This is a CME USD-denominated Nikkei future, not the
+    native Osaka cash index or JPX future; liquidity must be reported
+  session_calendar: CME_Equity
+  session_calendar_role: configured normal session; observed valid-date bars outside
+    are extended
+  session_calendar_limitations: Calendar rules are version-locked and must be checked
+    against the provider/product calendar during preflight; later exchange corrections
+    require a dependency update.
+- canonical_symbol: HANGSENG_CASH
+  canonical_name: Hang Seng Cash Index
+  enabled: true
+  required: true
+  asset_class: equity_index
+  subcategory: hong_kong_large_cap
+  instrument_type: cash_index
+  economic_exposure: Hang Seng Index
+  provider: twelve_data
+  provider_symbol: HSI
+  exchange: HKEX index feed
+  exchange_timezone: Asia/Hong_Kong
+  currency: HKD
+  price_unit: index_points
+  is_continuous: false
+  volume_type: unavailable
+  data_frequency: 5m_native_if_entitled
+  normal_session: Hong Kong cash-index publication hours
+  extended_session: none
+  data_licence: Twelve Data plan and underlying exchange entitlements apply
+  redistribution_restrictions: Personal/internal non-commercial use only unless separately
+    licensed
+  methodological_limitations: Cash index has no genuine traded volume; runtime preflight
+    must verify HSI symbol, five-minute history and entitlement before backfill
+  session_calendar: HKEX
+  session_calendar_role: configured normal session; observed valid-date bars outside
+    are extended
+  session_calendar_limitations: Calendar rules are version-locked and must be checked
+    against the provider/product calendar during preflight; later exchange corrections
+    require a dependency update.
+- canonical_symbol: US2Y_FUT_CONT
+  canonical_name: 2-Year U.S. Treasury Note Futures - Volume-Based Front Contract
+  enabled: true
+  required: true
+  asset_class: rates
+  subcategory: us_treasury_futures
+  instrument_type: continuous_future
+  economic_exposure: Approximately 2-year U.S. Treasury rate exposure
+  provider: databento
+  provider_symbol: ZT.v.0
+  dataset: GLBX.MDP3
+  stype_in: continuous
+  exchange: CBOT
+  exchange_timezone: America/Chicago
+  currency: USD
+  price_unit: futures_price
+  contract_multiplier: 200000
+  is_continuous: true
+  continuous_method: volume_based_unadjusted
+  volume_type: genuine
+  data_frequency: 5m_from_1m
+  normal_session: Globex session
+  extended_session: Globex session
+  data_licence: Databento/CBOT licensed data; internal research only
+  redistribution_restrictions: Do not redistribute raw exchange data
+  methodological_limitations: Futures price is not a yield; price changes usually
+    move inversely to yields
+  session_calendar: CBOT_Rate
+  session_calendar_role: configured normal session; observed valid-date bars outside
+    are extended
+  session_calendar_limitations: Calendar rules are version-locked and must be checked
+    against the provider/product calendar during preflight; later exchange corrections
+    require a dependency update.
+- canonical_symbol: US5Y_FUT_CONT
+  canonical_name: 5-Year U.S. Treasury Note Futures - Volume-Based Front Contract
+  enabled: true
+  required: true
+  asset_class: rates
+  subcategory: us_treasury_futures
+  instrument_type: continuous_future
+  economic_exposure: Approximately 5-year U.S. Treasury rate exposure
+  provider: databento
+  provider_symbol: ZF.v.0
+  dataset: GLBX.MDP3
+  stype_in: continuous
+  exchange: CBOT
+  exchange_timezone: America/Chicago
+  currency: USD
+  price_unit: futures_price
+  contract_multiplier: 100000
+  is_continuous: true
+  continuous_method: volume_based_unadjusted
+  volume_type: genuine
+  data_frequency: 5m_from_1m
+  normal_session: Globex session
+  extended_session: Globex session
+  data_licence: Databento/CBOT licensed data; internal research only
+  redistribution_restrictions: Do not redistribute raw exchange data
+  methodological_limitations: Futures price is not a yield
+  session_calendar: CBOT_Rate
+  session_calendar_role: configured normal session; observed valid-date bars outside
+    are extended
+  session_calendar_limitations: Calendar rules are version-locked and must be checked
+    against the provider/product calendar during preflight; later exchange corrections
+    require a dependency update.
+- canonical_symbol: US10Y_FUT_CONT
+  canonical_name: 10-Year U.S. Treasury Note Futures - Volume-Based Front Contract
+  enabled: true
+  required: true
+  asset_class: rates
+  subcategory: us_treasury_futures
+  instrument_type: continuous_future
+  economic_exposure: Approximately 10-year U.S. Treasury rate exposure
+  provider: databento
+  provider_symbol: ZN.v.0
+  dataset: GLBX.MDP3
+  stype_in: continuous
+  exchange: CBOT
+  exchange_timezone: America/Chicago
+  currency: USD
+  price_unit: futures_price
+  contract_multiplier: 100000
+  is_continuous: true
+  continuous_method: volume_based_unadjusted
+  volume_type: genuine
+  data_frequency: 5m_from_1m
+  normal_session: Globex session
+  extended_session: Globex session
+  data_licence: Databento/CBOT licensed data; internal research only
+  redistribution_restrictions: Do not redistribute raw exchange data
+  methodological_limitations: Futures price is not a yield
+  session_calendar: CBOT_Rate
+  session_calendar_role: configured normal session; observed valid-date bars outside
+    are extended
+  session_calendar_limitations: Calendar rules are version-locked and must be checked
+    against the provider/product calendar during preflight; later exchange corrections
+    require a dependency update.
+- canonical_symbol: US30Y_FUT_CONT
+  canonical_name: U.S. Treasury Bond Futures - Volume-Based Front Contract
+  enabled: true
+  required: true
+  asset_class: rates
+  subcategory: us_treasury_futures
+  instrument_type: continuous_future
+  economic_exposure: Long-duration U.S. Treasury rate exposure
+  provider: databento
+  provider_symbol: ZB.v.0
+  dataset: GLBX.MDP3
+  stype_in: continuous
+  exchange: CBOT
+  exchange_timezone: America/Chicago
+  currency: USD
+  price_unit: futures_price
+  contract_multiplier: 100000
+  is_continuous: true
+  continuous_method: volume_based_unadjusted
+  volume_type: genuine
+  data_frequency: 5m_from_1m
+  normal_session: Globex session
+  extended_session: Globex session
+  data_licence: Databento/CBOT licensed data; internal research only
+  redistribution_restrictions: Do not redistribute raw exchange data
+  methodological_limitations: Futures price is not a yield and is not a pure 30-year
+    constant-maturity exposure
+  session_calendar: CBOT_Bond
+  session_calendar_role: configured normal session; observed valid-date bars outside
+    are extended
+  session_calendar_limitations: Calendar rules are version-locked and must be checked
+    against the provider/product calendar during preflight; later exchange corrections
+    require a dependency update.
+- canonical_symbol: DE2Y_FUT_CONT
+  canonical_name: Eurex Euro-Schatz Futures - Volume-Based Front Contract
+  enabled: true
+  required: false
+  asset_class: rates
+  subcategory: german_government_futures
+  instrument_type: continuous_future
+  economic_exposure: Short German government bond exposure, approximately 2 years
+  provider: databento
+  provider_symbol: FGBS.v.0
+  dataset: XEUR.EOBI
+  stype_in: continuous
+  exchange: Eurex
+  exchange_timezone: Europe/Berlin
+  currency: EUR
+  price_unit: futures_price
+  contract_multiplier: 100000
+  is_continuous: true
+  continuous_method: volume_based_unadjusted
+  volume_type: genuine
+  data_frequency: 5m_from_1m
+  normal_session: Eurex session
+  extended_session: Eurex extended hours where available
+  data_licence: Databento/Eurex licensed data; internal research only
+  redistribution_restrictions: Do not redistribute raw exchange data
+  methodological_limitations: Futures price is not a yield
+  session_calendar: EUREX_Bond
+  session_calendar_role: configured normal session; observed valid-date bars outside
+    are extended
+  session_calendar_limitations: Calendar rules are version-locked and must be checked
+    against the provider/product calendar during preflight; later exchange corrections
+    require a dependency update.
+- canonical_symbol: DE10Y_FUT_CONT
+  canonical_name: Eurex Euro-Bund Futures - Volume-Based Front Contract
+  enabled: true
+  required: false
+  asset_class: rates
+  subcategory: german_government_futures
+  instrument_type: continuous_future
+  economic_exposure: German government bond exposure, approximately 10 years
+  provider: databento
+  provider_symbol: FGBL.v.0
+  dataset: XEUR.EOBI
+  stype_in: continuous
+  exchange: Eurex
+  exchange_timezone: Europe/Berlin
+  currency: EUR
+  price_unit: futures_price
+  contract_multiplier: 100000
+  is_continuous: true
+  continuous_method: volume_based_unadjusted
+  volume_type: genuine
+  data_frequency: 5m_from_1m
+  normal_session: Eurex session
+  extended_session: Eurex extended hours where available
+  data_licence: Databento/Eurex licensed data; internal research only
+  redistribution_restrictions: Do not redistribute raw exchange data
+  methodological_limitations: Futures price is not a yield
+  session_calendar: EUREX_Bond
+  session_calendar_role: configured normal session; observed valid-date bars outside
+    are extended
+  session_calendar_limitations: Calendar rules are version-locked and must be checked
+    against the provider/product calendar during preflight; later exchange corrections
+    require a dependency update.
+- canonical_symbol: UK10Y_GILT_FUT_CONT
+  canonical_name: ICE Long Gilt Futures - Volume-Based Front Contract
+  enabled: true
+  required: false
+  asset_class: rates
+  subcategory: uk_gilt_futures
+  instrument_type: continuous_future
+  economic_exposure: Long gilt rate exposure, approximately 10 years
+  provider: databento
+  provider_symbol: R.v.0
+  dataset: IFLL.IMPACT
+  stype_in: continuous
+  exchange: ICE Europe Financials
+  exchange_timezone: Europe/London
+  currency: GBP
+  price_unit: futures_price
+  contract_multiplier: 100000
+  is_continuous: true
+  continuous_method: volume_based_unadjusted
+  volume_type: genuine
+  data_frequency: 5m_from_1m
+  normal_session: ICE session; verify product calendar
+  extended_session: ICE session
+  data_licence: Databento/ICE licensed data; internal research only
+  redistribution_restrictions: Do not redistribute raw exchange data
+  methodological_limitations: Provider symbol is verified at preflight; futures price
+    is not a yield; no equally liquid UK 2-year government-bond future is assumed
+  session_calendar: ICE
+  session_calendar_role: configured normal session; observed valid-date bars outside
+    are extended
+  session_calendar_limitations: Calendar rules are version-locked and must be checked
+    against the provider/product calendar during preflight; later exchange corrections
+    require a dependency update.
+- canonical_symbol: US2Y_YIELD
+  canonical_name: U.S. Treasury 2-Year Constant Maturity Yield
+  enabled: true
+  required: true
+  asset_class: rates
+  subcategory: official_yield
+  instrument_type: yield
+  economic_exposure: U.S. Treasury 2-year constant maturity yield
+  provider: fred
+  provider_symbol: DGS2
+  exchange: Federal Reserve H.15 via FRED
+  exchange_timezone: America/New_York
+  currency: USD
+  price_unit: percent_per_annum
+  is_continuous: false
+  volume_type: unavailable
+  data_frequency: daily
+  maturity: 2Y
+  yield_type: constant_maturity_market_yield
+  data_licence: FRED terms and source attribution apply
+  redistribution_restrictions: Preserve source attribution
+  methodological_limitations: Daily estimate, not intraday; publication lag must be
+    respected
+- canonical_symbol: US5Y_YIELD
+  canonical_name: U.S. Treasury 5-Year Constant Maturity Yield
+  enabled: true
+  required: true
+  asset_class: rates
+  subcategory: official_yield
+  instrument_type: yield
+  economic_exposure: U.S. Treasury 5-year constant maturity yield
+  provider: fred
+  provider_symbol: DGS5
+  exchange: Federal Reserve H.15 via FRED
+  exchange_timezone: America/New_York
+  currency: USD
+  price_unit: percent_per_annum
+  is_continuous: false
+  volume_type: unavailable
+  data_frequency: daily
+  maturity: 5Y
+  yield_type: constant_maturity_market_yield
+  data_licence: FRED terms and source attribution apply
+  redistribution_restrictions: Preserve source attribution
+  methodological_limitations: Daily estimate, not intraday; publication lag must be
+    respected
+- canonical_symbol: US10Y_YIELD
+  canonical_name: U.S. Treasury 10-Year Constant Maturity Yield
+  enabled: true
+  required: true
+  asset_class: rates
+  subcategory: official_yield
+  instrument_type: yield
+  economic_exposure: U.S. Treasury 10-year constant maturity yield
+  provider: fred
+  provider_symbol: DGS10
+  exchange: Federal Reserve H.15 via FRED
+  exchange_timezone: America/New_York
+  currency: USD
+  price_unit: percent_per_annum
+  is_continuous: false
+  volume_type: unavailable
+  data_frequency: daily
+  maturity: 10Y
+  yield_type: constant_maturity_market_yield
+  data_licence: FRED terms and source attribution apply
+  redistribution_restrictions: Preserve source attribution
+  methodological_limitations: Daily estimate, not intraday; publication lag must be
+    respected
+- canonical_symbol: US30Y_YIELD
+  canonical_name: U.S. Treasury 30-Year Constant Maturity Yield
+  enabled: true
+  required: true
+  asset_class: rates
+  subcategory: official_yield
+  instrument_type: yield
+  economic_exposure: U.S. Treasury 30-year constant maturity yield
+  provider: fred
+  provider_symbol: DGS30
+  exchange: Federal Reserve H.15 via FRED
+  exchange_timezone: America/New_York
+  currency: USD
+  price_unit: percent_per_annum
+  is_continuous: false
+  volume_type: unavailable
+  data_frequency: daily
+  maturity: 30Y
+  yield_type: constant_maturity_market_yield
+  data_licence: FRED terms and source attribution apply
+  redistribution_restrictions: Preserve source attribution
+  methodological_limitations: Daily estimate, not intraday; publication lag must be
+    respected
+- canonical_symbol: UK2Y_YIELD
+  canonical_name: UK Government Nominal Spot Yield - 2 Year
+  enabled: true
+  required: false
+  asset_class: rates
+  subcategory: official_yield
+  instrument_type: yield
+  economic_exposure: UK nominal government spot yield at 2-year maturity
+  provider: boe_yield_curve
+  provider_symbol: GL_NOMINAL_2Y
+  exchange: Bank of England estimated gilt curve
+  exchange_timezone: Europe/London
+  currency: GBP
+  price_unit: percent_per_annum_continuously_compounded
+  is_continuous: false
+  volume_type: unavailable
+  data_frequency: daily
+  maturity: 2Y
+  yield_type: fitted_zero_coupon_spot_rate
+  data_licence: Bank of England copyright/disclaimer applies
+  redistribution_restrictions: Use and store only under Bank of England conditions
+  methodological_limitations: Fitted curve, daily and revisable; no API is offered
+    by the Bank
+- canonical_symbol: UK10Y_YIELD
+  canonical_name: UK Government Nominal Spot Yield - 10 Year
+  enabled: true
+  required: false
+  asset_class: rates
+  subcategory: official_yield
+  instrument_type: yield
+  economic_exposure: UK nominal government spot yield at 10-year maturity
+  provider: boe_yield_curve
+  provider_symbol: GL_NOMINAL_10Y
+  exchange: Bank of England estimated gilt curve
+  exchange_timezone: Europe/London
+  currency: GBP
+  price_unit: percent_per_annum_continuously_compounded
+  is_continuous: false
+  volume_type: unavailable
+  data_frequency: daily
+  maturity: 10Y
+  yield_type: fitted_zero_coupon_spot_rate
+  data_licence: Bank of England copyright/disclaimer applies
+  redistribution_restrictions: Use and store only under Bank of England conditions
+  methodological_limitations: Fitted curve, daily and revisable; no API is offered
+    by the Bank
+- canonical_symbol: DE2Y_YIELD
+  canonical_name: German Current Federal Treasury Note Yield - 2 Year
+  enabled: true
+  required: false
+  asset_class: rates
+  subcategory: official_yield
+  instrument_type: yield
+  economic_exposure: Current German two-year Federal Treasury note yield
+  provider: bundesbank
+  provider_symbol: BBSSY.D.REN.EUR.A610.000000WT0202.A
+  exchange: Deutsche Bundesbank
+  exchange_timezone: Europe/Berlin
+  currency: EUR
+  price_unit: percent_per_annum
+  is_continuous: false
+  volume_type: unavailable
+  data_frequency: daily
+  maturity: 2Y
+  yield_type: current_federal_security_yield
+  data_licence: Deutsche Bundesbank usage conditions apply
+  redistribution_restrictions: Preserve attribution and usage conditions
+  methodological_limitations: Yield of the current security, not a fitted constant-maturity
+    series
+- canonical_symbol: DE10Y_YIELD
+  canonical_name: German Current Federal Bond Yield - 10 Year
+  enabled: true
+  required: false
+  asset_class: rates
+  subcategory: official_yield
+  instrument_type: yield
+  economic_exposure: Current German ten-year federal bond yield
+  provider: bundesbank
+  provider_symbol: BBSSY.D.REN.EUR.A630.000000WT1010.A
+  exchange: Deutsche Bundesbank
+  exchange_timezone: Europe/Berlin
+  currency: EUR
+  price_unit: percent_per_annum
+  is_continuous: false
+  volume_type: unavailable
+  data_frequency: daily
+  maturity: 10Y
+  yield_type: current_federal_security_yield
+  data_licence: Deutsche Bundesbank usage conditions apply
+  redistribution_restrictions: Preserve attribution and usage conditions
+  methodological_limitations: Yield of the current security, not a fitted constant-maturity
+    series

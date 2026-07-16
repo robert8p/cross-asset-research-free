@@ -1,0 +1,812 @@
+version: 2
+edition: free_data_proxy
+instruments:
+- canonical_symbol: USO_WTI_PROXY
+  canonical_name: United States Oil Fund ETF — WTI Futures Proxy
+  enabled: true
+  required: true
+  asset_class: commodity
+  subcategory: energy
+  instrument_type: etf_proxy
+  economic_exposure: US-listed fund holding primarily WTI crude-oil futures
+  provider: alpaca
+  provider_symbol: USO
+  exchange: US-listed ETF; Alpaca IEX market-data feed
+  exchange_timezone: America/New_York
+  currency: USD
+  price_unit: USD_per_share
+  is_continuous: false
+  volume_type: genuine_single_venue_partial
+  data_frequency: 5m_native
+  normal_session: 09:30-16:00 America/New_York
+  extended_session: Provider-observed eligible pre-market and after-hours IEX trades
+  data_licence: Alpaca Market Data terms apply; internal personal research use only unless separately permitted
+  redistribution_restrictions: Do not redistribute raw market data without confirming Alpaca and underlying exchange
+    permissions
+  methodological_limitations: Not spot WTI and not the CL futures contract. Fund expenses, collateral return, contract
+    selection and futures-roll effects can materially alter behaviour. Alpaca free data uses IEX only, so volume
+    and trade count are not consolidated US-market totals.
+  session_calendar: XNYS
+  session_calendar_role: NYSE regular session; observed valid-date bars outside are labelled extended
+  session_calendar_limitations: ETF venue trading and IEX observations may occur outside the configured regular
+    session; no bars are invented or forward-filled.
+  proxy_for: WTI crude oil futures
+  proxy_status: explicit_non_equivalent_substitution
+  alpaca_feed: iex
+  adjustment: raw
+- canonical_symbol: BNO_BRENT_PROXY
+  canonical_name: United States Brent Oil Fund ETF — Brent Futures Proxy
+  enabled: true
+  required: true
+  asset_class: commodity
+  subcategory: energy
+  instrument_type: etf_proxy
+  economic_exposure: US-listed fund holding Brent crude-oil futures
+  provider: alpaca
+  provider_symbol: BNO
+  exchange: US-listed ETF; Alpaca IEX market-data feed
+  exchange_timezone: America/New_York
+  currency: USD
+  price_unit: USD_per_share
+  is_continuous: false
+  volume_type: genuine_single_venue_partial
+  data_frequency: 5m_native
+  normal_session: 09:30-16:00 America/New_York
+  extended_session: Provider-observed eligible pre-market and after-hours IEX trades
+  data_licence: Alpaca Market Data terms apply; internal personal research use only unless separately permitted
+  redistribution_restrictions: Do not redistribute raw market data without confirming Alpaca and underlying exchange
+    permissions
+  methodological_limitations: Not spot Brent and not the ICE Brent futures contract. Fund structure, expenses, collateral
+    return and rolling can materially alter behaviour. Alpaca free data uses IEX only, so volume and trade count
+    are not consolidated US-market totals.
+  session_calendar: XNYS
+  session_calendar_role: NYSE regular session; observed valid-date bars outside are labelled extended
+  session_calendar_limitations: ETF venue trading and IEX observations may occur outside the configured regular
+    session; no bars are invented or forward-filled.
+  proxy_for: Brent crude oil futures
+  proxy_status: explicit_non_equivalent_substitution
+  alpaca_feed: iex
+  adjustment: raw
+- canonical_symbol: GLD_GOLD_PROXY
+  canonical_name: SPDR Gold Shares — Gold Bullion Proxy
+  enabled: true
+  required: true
+  asset_class: commodity
+  subcategory: precious_metals
+  instrument_type: etf_proxy
+  economic_exposure: US-listed trust backed primarily by physical gold
+  provider: alpaca
+  provider_symbol: GLD
+  exchange: US-listed ETF; Alpaca IEX market-data feed
+  exchange_timezone: America/New_York
+  currency: USD
+  price_unit: USD_per_share
+  is_continuous: false
+  volume_type: genuine_single_venue_partial
+  data_frequency: 5m_native
+  normal_session: 09:30-16:00 America/New_York
+  extended_session: Provider-observed eligible pre-market and after-hours IEX trades
+  data_licence: Alpaca Market Data terms apply; internal personal research use only unless separately permitted
+  redistribution_restrictions: Do not redistribute raw market data without confirming Alpaca and underlying exchange
+    permissions
+  methodological_limitations: Tracks bullion less fees; it does not provide COMEX futures volume, futures curve
+    information or overnight native-market trading. Alpaca free data uses IEX only, so volume and trade count are
+    not consolidated US-market totals.
+  session_calendar: XNYS
+  session_calendar_role: NYSE regular session; observed valid-date bars outside are labelled extended
+  session_calendar_limitations: ETF venue trading and IEX observations may occur outside the configured regular
+    session; no bars are invented or forward-filled.
+  proxy_for: Gold futures / spot gold
+  proxy_status: explicit_non_equivalent_substitution
+  alpaca_feed: iex
+  adjustment: raw
+- canonical_symbol: SLV_SILVER_PROXY
+  canonical_name: iShares Silver Trust — Silver Bullion Proxy
+  enabled: true
+  required: true
+  asset_class: commodity
+  subcategory: precious_metals
+  instrument_type: etf_proxy
+  economic_exposure: US-listed trust backed primarily by physical silver
+  provider: alpaca
+  provider_symbol: SLV
+  exchange: US-listed ETF; Alpaca IEX market-data feed
+  exchange_timezone: America/New_York
+  currency: USD
+  price_unit: USD_per_share
+  is_continuous: false
+  volume_type: genuine_single_venue_partial
+  data_frequency: 5m_native
+  normal_session: 09:30-16:00 America/New_York
+  extended_session: Provider-observed eligible pre-market and after-hours IEX trades
+  data_licence: Alpaca Market Data terms apply; internal personal research use only unless separately permitted
+  redistribution_restrictions: Do not redistribute raw market data without confirming Alpaca and underlying exchange
+    permissions
+  methodological_limitations: Tracks bullion less fees; it does not provide COMEX futures volume, futures curve
+    information or overnight native-market trading. Alpaca free data uses IEX only, so volume and trade count are
+    not consolidated US-market totals.
+  session_calendar: XNYS
+  session_calendar_role: NYSE regular session; observed valid-date bars outside are labelled extended
+  session_calendar_limitations: ETF venue trading and IEX observations may occur outside the configured regular
+    session; no bars are invented or forward-filled.
+  proxy_for: Silver futures / spot silver
+  proxy_status: explicit_non_equivalent_substitution
+  alpaca_feed: iex
+  adjustment: raw
+- canonical_symbol: SPY_SP500_PROXY
+  canonical_name: SPDR S&P 500 ETF Trust — S&P 500 Proxy
+  enabled: true
+  required: true
+  asset_class: equity_index
+  subcategory: us_large_cap
+  instrument_type: etf_proxy
+  economic_exposure: US-listed ETF designed to track the S&P 500
+  provider: alpaca
+  provider_symbol: SPY
+  exchange: US-listed ETF; Alpaca IEX market-data feed
+  exchange_timezone: America/New_York
+  currency: USD
+  price_unit: USD_per_share
+  is_continuous: false
+  volume_type: genuine_single_venue_partial
+  data_frequency: 5m_native
+  normal_session: 09:30-16:00 America/New_York
+  extended_session: Provider-observed eligible pre-market and after-hours IEX trades
+  data_licence: Alpaca Market Data terms apply; internal personal research use only unless separately permitted
+  redistribution_restrictions: Do not redistribute raw market data without confirming Alpaca and underlying exchange
+    permissions
+  methodological_limitations: ETF price can differ from the cash index and futures because of distributions, fees,
+    market microstructure and trading hours. Alpaca free data uses IEX only, so volume and trade count are not consolidated
+    US-market totals.
+  session_calendar: XNYS
+  session_calendar_role: NYSE regular session; observed valid-date bars outside are labelled extended
+  session_calendar_limitations: ETF venue trading and IEX observations may occur outside the configured regular
+    session; no bars are invented or forward-filled.
+  proxy_for: S&P 500 cash index / futures
+  proxy_status: explicit_non_equivalent_substitution
+  alpaca_feed: iex
+  adjustment: raw
+- canonical_symbol: QQQ_NASDAQ100_PROXY
+  canonical_name: Invesco QQQ Trust — Nasdaq-100 Proxy
+  enabled: true
+  required: true
+  asset_class: equity_index
+  subcategory: us_technology
+  instrument_type: etf_proxy
+  economic_exposure: US-listed ETF designed to track the Nasdaq-100
+  provider: alpaca
+  provider_symbol: QQQ
+  exchange: US-listed ETF; Alpaca IEX market-data feed
+  exchange_timezone: America/New_York
+  currency: USD
+  price_unit: USD_per_share
+  is_continuous: false
+  volume_type: genuine_single_venue_partial
+  data_frequency: 5m_native
+  normal_session: 09:30-16:00 America/New_York
+  extended_session: Provider-observed eligible pre-market and after-hours IEX trades
+  data_licence: Alpaca Market Data terms apply; internal personal research use only unless separately permitted
+  redistribution_restrictions: Do not redistribute raw market data without confirming Alpaca and underlying exchange
+    permissions
+  methodological_limitations: ETF price can differ from the cash index and futures because of distributions, fees,
+    market microstructure and trading hours. Alpaca free data uses IEX only, so volume and trade count are not consolidated
+    US-market totals.
+  session_calendar: XNYS
+  session_calendar_role: NYSE regular session; observed valid-date bars outside are labelled extended
+  session_calendar_limitations: ETF venue trading and IEX observations may occur outside the configured regular
+    session; no bars are invented or forward-filled.
+  proxy_for: Nasdaq-100 cash index / futures
+  proxy_status: explicit_non_equivalent_substitution
+  alpaca_feed: iex
+  adjustment: raw
+- canonical_symbol: DIA_DJIA_PROXY
+  canonical_name: SPDR Dow Jones Industrial Average ETF — DJIA Proxy
+  enabled: true
+  required: true
+  asset_class: equity_index
+  subcategory: us_blue_chip
+  instrument_type: etf_proxy
+  economic_exposure: US-listed ETF designed to track the Dow Jones Industrial Average
+  provider: alpaca
+  provider_symbol: DIA
+  exchange: US-listed ETF; Alpaca IEX market-data feed
+  exchange_timezone: America/New_York
+  currency: USD
+  price_unit: USD_per_share
+  is_continuous: false
+  volume_type: genuine_single_venue_partial
+  data_frequency: 5m_native
+  normal_session: 09:30-16:00 America/New_York
+  extended_session: Provider-observed eligible pre-market and after-hours IEX trades
+  data_licence: Alpaca Market Data terms apply; internal personal research use only unless separately permitted
+  redistribution_restrictions: Do not redistribute raw market data without confirming Alpaca and underlying exchange
+    permissions
+  methodological_limitations: ETF price can differ from the cash index and futures because of distributions, fees,
+    market microstructure and trading hours. Alpaca free data uses IEX only, so volume and trade count are not consolidated
+    US-market totals.
+  session_calendar: XNYS
+  session_calendar_role: NYSE regular session; observed valid-date bars outside are labelled extended
+  session_calendar_limitations: ETF venue trading and IEX observations may occur outside the configured regular
+    session; no bars are invented or forward-filled.
+  proxy_for: Dow Jones Industrial Average cash index / futures
+  proxy_status: explicit_non_equivalent_substitution
+  alpaca_feed: iex
+  adjustment: raw
+- canonical_symbol: IWM_RUSSELL2000_PROXY
+  canonical_name: iShares Russell 2000 ETF — Russell 2000 Proxy
+  enabled: true
+  required: true
+  asset_class: equity_index
+  subcategory: us_small_cap
+  instrument_type: etf_proxy
+  economic_exposure: US-listed ETF designed to track the Russell 2000
+  provider: alpaca
+  provider_symbol: IWM
+  exchange: US-listed ETF; Alpaca IEX market-data feed
+  exchange_timezone: America/New_York
+  currency: USD
+  price_unit: USD_per_share
+  is_continuous: false
+  volume_type: genuine_single_venue_partial
+  data_frequency: 5m_native
+  normal_session: 09:30-16:00 America/New_York
+  extended_session: Provider-observed eligible pre-market and after-hours IEX trades
+  data_licence: Alpaca Market Data terms apply; internal personal research use only unless separately permitted
+  redistribution_restrictions: Do not redistribute raw market data without confirming Alpaca and underlying exchange
+    permissions
+  methodological_limitations: ETF price can differ from the cash index and futures because of distributions, fees,
+    sampling, market microstructure and trading hours. Alpaca free data uses IEX only, so volume and trade count
+    are not consolidated US-market totals.
+  session_calendar: XNYS
+  session_calendar_role: NYSE regular session; observed valid-date bars outside are labelled extended
+  session_calendar_limitations: ETF venue trading and IEX observations may occur outside the configured regular
+    session; no bars are invented or forward-filled.
+  proxy_for: Russell 2000 cash index / futures
+  proxy_status: explicit_non_equivalent_substitution
+  alpaca_feed: iex
+  adjustment: raw
+- canonical_symbol: VIXY_VIX_FUTURES_PROXY
+  canonical_name: ProShares VIX Short-Term Futures ETF — Volatility Futures Proxy
+  enabled: true
+  required: true
+  asset_class: volatility
+  subcategory: equity_volatility
+  instrument_type: etf_proxy
+  economic_exposure: US-listed ETF holding short-term VIX futures
+  provider: alpaca
+  provider_symbol: VIXY
+  exchange: US-listed ETF; Alpaca IEX market-data feed
+  exchange_timezone: America/New_York
+  currency: USD
+  price_unit: USD_per_share
+  is_continuous: false
+  volume_type: genuine_single_venue_partial
+  data_frequency: 5m_native
+  normal_session: 09:30-16:00 America/New_York
+  extended_session: Provider-observed eligible pre-market and after-hours IEX trades
+  data_licence: Alpaca Market Data terms apply; internal personal research use only unless separately permitted
+  redistribution_restrictions: Do not redistribute raw market data without confirming Alpaca and underlying exchange
+    permissions
+  methodological_limitations: This is not the VIX cash index. Futures term structure, daily rebalancing, roll yield
+    and decay can dominate its returns. Alpaca free data uses IEX only, so volume and trade count are not consolidated
+    US-market totals.
+  session_calendar: XNYS
+  session_calendar_role: NYSE regular session; observed valid-date bars outside are labelled extended
+  session_calendar_limitations: ETF venue trading and IEX observations may occur outside the configured regular
+    session; no bars are invented or forward-filled.
+  proxy_for: VIX cash index
+  proxy_status: explicit_non_equivalent_substitution
+  alpaca_feed: iex
+  adjustment: raw
+- canonical_symbol: EWU_UK_EQUITY_PROXY
+  canonical_name: iShares MSCI United Kingdom ETF — UK Equity Proxy
+  enabled: true
+  required: true
+  asset_class: equity_index
+  subcategory: uk_equity
+  instrument_type: etf_proxy
+  economic_exposure: US-listed ETF tracking a broad UK equity index
+  provider: alpaca
+  provider_symbol: EWU
+  exchange: US-listed ETF; Alpaca IEX market-data feed
+  exchange_timezone: America/New_York
+  currency: USD
+  price_unit: USD_per_share
+  is_continuous: false
+  volume_type: genuine_single_venue_partial
+  data_frequency: 5m_native
+  normal_session: 09:30-16:00 America/New_York
+  extended_session: Provider-observed eligible pre-market and after-hours IEX trades
+  data_licence: Alpaca Market Data terms apply; internal personal research use only unless separately permitted
+  redistribution_restrictions: Do not redistribute raw market data without confirming Alpaca and underlying exchange
+    permissions
+  methodological_limitations: Tracks MSCI United Kingdom, not FTSE 100. Currency conversion, US trading hours, distributions
+    and index composition create basis risk. Alpaca free data uses IEX only, so volume and trade count are not consolidated
+    US-market totals.
+  session_calendar: XNYS
+  session_calendar_role: NYSE regular session; observed valid-date bars outside are labelled extended
+  session_calendar_limitations: ETF venue trading and IEX observations may occur outside the configured regular
+    session; no bars are invented or forward-filled.
+  proxy_for: FTSE 100
+  proxy_status: explicit_non_equivalent_substitution
+  alpaca_feed: iex
+  adjustment: raw
+- canonical_symbol: EWG_GERMANY_EQUITY_PROXY
+  canonical_name: iShares MSCI Germany ETF — Germany Equity Proxy
+  enabled: true
+  required: true
+  asset_class: equity_index
+  subcategory: germany_equity
+  instrument_type: etf_proxy
+  economic_exposure: US-listed ETF tracking a broad German equity index
+  provider: alpaca
+  provider_symbol: EWG
+  exchange: US-listed ETF; Alpaca IEX market-data feed
+  exchange_timezone: America/New_York
+  currency: USD
+  price_unit: USD_per_share
+  is_continuous: false
+  volume_type: genuine_single_venue_partial
+  data_frequency: 5m_native
+  normal_session: 09:30-16:00 America/New_York
+  extended_session: Provider-observed eligible pre-market and after-hours IEX trades
+  data_licence: Alpaca Market Data terms apply; internal personal research use only unless separately permitted
+  redistribution_restrictions: Do not redistribute raw market data without confirming Alpaca and underlying exchange
+    permissions
+  methodological_limitations: Tracks MSCI Germany, not DAX 40. Currency conversion, US trading hours, distributions
+    and index composition create basis risk. Alpaca free data uses IEX only, so volume and trade count are not consolidated
+    US-market totals.
+  session_calendar: XNYS
+  session_calendar_role: NYSE regular session; observed valid-date bars outside are labelled extended
+  session_calendar_limitations: ETF venue trading and IEX observations may occur outside the configured regular
+    session; no bars are invented or forward-filled.
+  proxy_for: DAX 40
+  proxy_status: explicit_non_equivalent_substitution
+  alpaca_feed: iex
+  adjustment: raw
+- canonical_symbol: FEZ_EUROSTOXX50_PROXY
+  canonical_name: SPDR EURO STOXX 50 ETF — Euro Stoxx 50 Proxy
+  enabled: true
+  required: true
+  asset_class: equity_index
+  subcategory: eurozone_large_cap
+  instrument_type: etf_proxy
+  economic_exposure: US-listed ETF designed to track the EURO STOXX 50
+  provider: alpaca
+  provider_symbol: FEZ
+  exchange: US-listed ETF; Alpaca IEX market-data feed
+  exchange_timezone: America/New_York
+  currency: USD
+  price_unit: USD_per_share
+  is_continuous: false
+  volume_type: genuine_single_venue_partial
+  data_frequency: 5m_native
+  normal_session: 09:30-16:00 America/New_York
+  extended_session: Provider-observed eligible pre-market and after-hours IEX trades
+  data_licence: Alpaca Market Data terms apply; internal personal research use only unless separately permitted
+  redistribution_restrictions: Do not redistribute raw market data without confirming Alpaca and underlying exchange
+    permissions
+  methodological_limitations: Economically close but still a USD-traded ETF with fund fees, distributions, currency
+    effects and US trading hours. Alpaca free data uses IEX only, so volume and trade count are not consolidated
+    US-market totals.
+  session_calendar: XNYS
+  session_calendar_role: NYSE regular session; observed valid-date bars outside are labelled extended
+  session_calendar_limitations: ETF venue trading and IEX observations may occur outside the configured regular
+    session; no bars are invented or forward-filled.
+  proxy_for: Euro Stoxx 50 cash index / futures
+  proxy_status: explicit_non_equivalent_substitution
+  alpaca_feed: iex
+  adjustment: raw
+- canonical_symbol: EWJ_JAPAN_EQUITY_PROXY
+  canonical_name: iShares MSCI Japan ETF — Japan Equity Proxy
+  enabled: true
+  required: true
+  asset_class: equity_index
+  subcategory: japan_equity
+  instrument_type: etf_proxy
+  economic_exposure: US-listed ETF tracking a broad Japanese equity index
+  provider: alpaca
+  provider_symbol: EWJ
+  exchange: US-listed ETF; Alpaca IEX market-data feed
+  exchange_timezone: America/New_York
+  currency: USD
+  price_unit: USD_per_share
+  is_continuous: false
+  volume_type: genuine_single_venue_partial
+  data_frequency: 5m_native
+  normal_session: 09:30-16:00 America/New_York
+  extended_session: Provider-observed eligible pre-market and after-hours IEX trades
+  data_licence: Alpaca Market Data terms apply; internal personal research use only unless separately permitted
+  redistribution_restrictions: Do not redistribute raw market data without confirming Alpaca and underlying exchange
+    permissions
+  methodological_limitations: Tracks MSCI Japan, not Nikkei 225. It trades mainly during US hours, after the Japanese
+    cash session, and embeds FX and composition differences. Alpaca free data uses IEX only, so volume and trade
+    count are not consolidated US-market totals.
+  session_calendar: XNYS
+  session_calendar_role: NYSE regular session; observed valid-date bars outside are labelled extended
+  session_calendar_limitations: ETF venue trading and IEX observations may occur outside the configured regular
+    session; no bars are invented or forward-filled.
+  proxy_for: Nikkei 225
+  proxy_status: explicit_non_equivalent_substitution
+  alpaca_feed: iex
+  adjustment: raw
+- canonical_symbol: EWH_HONGKONG_EQUITY_PROXY
+  canonical_name: iShares MSCI Hong Kong ETF — Hong Kong Equity Proxy
+  enabled: true
+  required: true
+  asset_class: equity_index
+  subcategory: hong_kong_equity
+  instrument_type: etf_proxy
+  economic_exposure: US-listed ETF tracking a broad Hong Kong equity index
+  provider: alpaca
+  provider_symbol: EWH
+  exchange: US-listed ETF; Alpaca IEX market-data feed
+  exchange_timezone: America/New_York
+  currency: USD
+  price_unit: USD_per_share
+  is_continuous: false
+  volume_type: genuine_single_venue_partial
+  data_frequency: 5m_native
+  normal_session: 09:30-16:00 America/New_York
+  extended_session: Provider-observed eligible pre-market and after-hours IEX trades
+  data_licence: Alpaca Market Data terms apply; internal personal research use only unless separately permitted
+  redistribution_restrictions: Do not redistribute raw market data without confirming Alpaca and underlying exchange
+    permissions
+  methodological_limitations: Tracks MSCI Hong Kong, not Hang Seng. It trades mainly during US hours, after the
+    Hong Kong cash session, and embeds FX and composition differences. Alpaca free data uses IEX only, so volume
+    and trade count are not consolidated US-market totals.
+  session_calendar: XNYS
+  session_calendar_role: NYSE regular session; observed valid-date bars outside are labelled extended
+  session_calendar_limitations: ETF venue trading and IEX observations may occur outside the configured regular
+    session; no bars are invented or forward-filled.
+  proxy_for: Hang Seng Index
+  proxy_status: explicit_non_equivalent_substitution
+  alpaca_feed: iex
+  adjustment: raw
+- canonical_symbol: SHY_US2Y_RATE_PROXY
+  canonical_name: iShares 1-3 Year Treasury Bond ETF — Short Treasury Proxy
+  enabled: true
+  required: true
+  asset_class: rates
+  subcategory: us_treasury_etf_proxy
+  instrument_type: etf_proxy
+  economic_exposure: US Treasury securities with approximately 1-3 year maturities
+  provider: alpaca
+  provider_symbol: SHY
+  exchange: US-listed ETF; Alpaca IEX market-data feed
+  exchange_timezone: America/New_York
+  currency: USD
+  price_unit: USD_per_share
+  is_continuous: false
+  volume_type: genuine_single_venue_partial
+  data_frequency: 5m_native
+  normal_session: 09:30-16:00 America/New_York
+  extended_session: Provider-observed eligible pre-market and after-hours IEX trades
+  data_licence: Alpaca Market Data terms apply; internal personal research use only unless separately permitted
+  redistribution_restrictions: Do not redistribute raw market data without confirming Alpaca and underlying exchange
+    permissions
+  methodological_limitations: ETF price is not a yield and is not a constant two-year instrument. Duration, coupons,
+    distributions, fund rebalancing and expenses affect returns. Alpaca free data uses IEX only, so volume and trade
+    count are not consolidated US-market totals.
+  session_calendar: XNYS
+  session_calendar_role: NYSE regular session; observed valid-date bars outside are labelled extended
+  session_calendar_limitations: ETF venue trading and IEX observations may occur outside the configured regular
+    session; no bars are invented or forward-filled.
+  proxy_for: 2-year Treasury yield / futures
+  proxy_status: explicit_non_equivalent_substitution
+  alpaca_feed: iex
+  adjustment: raw
+- canonical_symbol: IEI_US5Y_RATE_PROXY
+  canonical_name: iShares 3-7 Year Treasury Bond ETF — Intermediate Treasury Proxy
+  enabled: true
+  required: true
+  asset_class: rates
+  subcategory: us_treasury_etf_proxy
+  instrument_type: etf_proxy
+  economic_exposure: US Treasury securities with approximately 3-7 year maturities
+  provider: alpaca
+  provider_symbol: IEI
+  exchange: US-listed ETF; Alpaca IEX market-data feed
+  exchange_timezone: America/New_York
+  currency: USD
+  price_unit: USD_per_share
+  is_continuous: false
+  volume_type: genuine_single_venue_partial
+  data_frequency: 5m_native
+  normal_session: 09:30-16:00 America/New_York
+  extended_session: Provider-observed eligible pre-market and after-hours IEX trades
+  data_licence: Alpaca Market Data terms apply; internal personal research use only unless separately permitted
+  redistribution_restrictions: Do not redistribute raw market data without confirming Alpaca and underlying exchange
+    permissions
+  methodological_limitations: ETF price is not a yield and is not a constant five-year instrument. Duration, coupons,
+    distributions, fund rebalancing and expenses affect returns. Alpaca free data uses IEX only, so volume and trade
+    count are not consolidated US-market totals.
+  session_calendar: XNYS
+  session_calendar_role: NYSE regular session; observed valid-date bars outside are labelled extended
+  session_calendar_limitations: ETF venue trading and IEX observations may occur outside the configured regular
+    session; no bars are invented or forward-filled.
+  proxy_for: 5-year Treasury yield / futures
+  proxy_status: explicit_non_equivalent_substitution
+  alpaca_feed: iex
+  adjustment: raw
+- canonical_symbol: IEF_US10Y_RATE_PROXY
+  canonical_name: iShares 7-10 Year Treasury Bond ETF — 10-Year Treasury Proxy
+  enabled: true
+  required: true
+  asset_class: rates
+  subcategory: us_treasury_etf_proxy
+  instrument_type: etf_proxy
+  economic_exposure: US Treasury securities with approximately 7-10 year maturities
+  provider: alpaca
+  provider_symbol: IEF
+  exchange: US-listed ETF; Alpaca IEX market-data feed
+  exchange_timezone: America/New_York
+  currency: USD
+  price_unit: USD_per_share
+  is_continuous: false
+  volume_type: genuine_single_venue_partial
+  data_frequency: 5m_native
+  normal_session: 09:30-16:00 America/New_York
+  extended_session: Provider-observed eligible pre-market and after-hours IEX trades
+  data_licence: Alpaca Market Data terms apply; internal personal research use only unless separately permitted
+  redistribution_restrictions: Do not redistribute raw market data without confirming Alpaca and underlying exchange
+    permissions
+  methodological_limitations: ETF price is not a yield and is not a constant ten-year instrument. Duration, coupons,
+    distributions, fund rebalancing and expenses affect returns. Alpaca free data uses IEX only, so volume and trade
+    count are not consolidated US-market totals.
+  session_calendar: XNYS
+  session_calendar_role: NYSE regular session; observed valid-date bars outside are labelled extended
+  session_calendar_limitations: ETF venue trading and IEX observations may occur outside the configured regular
+    session; no bars are invented or forward-filled.
+  proxy_for: 10-year Treasury yield / futures
+  proxy_status: explicit_non_equivalent_substitution
+  alpaca_feed: iex
+  adjustment: raw
+- canonical_symbol: TLT_US30Y_RATE_PROXY
+  canonical_name: iShares 20+ Year Treasury Bond ETF — Long Treasury Proxy
+  enabled: true
+  required: true
+  asset_class: rates
+  subcategory: us_treasury_etf_proxy
+  instrument_type: etf_proxy
+  economic_exposure: Long-duration US Treasury securities with maturities above 20 years
+  provider: alpaca
+  provider_symbol: TLT
+  exchange: US-listed ETF; Alpaca IEX market-data feed
+  exchange_timezone: America/New_York
+  currency: USD
+  price_unit: USD_per_share
+  is_continuous: false
+  volume_type: genuine_single_venue_partial
+  data_frequency: 5m_native
+  normal_session: 09:30-16:00 America/New_York
+  extended_session: Provider-observed eligible pre-market and after-hours IEX trades
+  data_licence: Alpaca Market Data terms apply; internal personal research use only unless separately permitted
+  redistribution_restrictions: Do not redistribute raw market data without confirming Alpaca and underlying exchange
+    permissions
+  methodological_limitations: ETF price is not a yield and is not a pure 30-year constant-maturity instrument. Duration,
+    coupons, distributions, rebalancing and expenses affect returns. Alpaca free data uses IEX only, so volume and
+    trade count are not consolidated US-market totals.
+  session_calendar: XNYS
+  session_calendar_role: NYSE regular session; observed valid-date bars outside are labelled extended
+  session_calendar_limitations: ETF venue trading and IEX observations may occur outside the configured regular
+    session; no bars are invented or forward-filled.
+  proxy_for: 30-year Treasury yield / long-bond futures
+  proxy_status: explicit_non_equivalent_substitution
+  alpaca_feed: iex
+  adjustment: raw
+- canonical_symbol: BTC_USD_SPOT
+  canonical_name: Bitcoin / US Dollar Spot - Coinbase Exchange
+  enabled: true
+  required: true
+  asset_class: cryptocurrency
+  subcategory: spot
+  instrument_type: spot
+  economic_exposure: Bitcoin quoted in US dollars on Coinbase Exchange only
+  provider: coinbase
+  provider_symbol: BTC-USD
+  exchange: Coinbase Exchange
+  exchange_timezone: UTC
+  currency: USD
+  price_unit: USD_per_BTC
+  is_continuous: false
+  volume_type: genuine
+  data_frequency: 5m_native
+  normal_session: 24/7
+  extended_session: 24/7
+  data_licence: Coinbase API terms apply
+  redistribution_restrictions: Confirm intended use under Coinbase terms before redistribution
+  methodological_limitations: Single-venue Coinbase Exchange price; genuine 24/7 five-minute OHLCV, but it is not
+    a composite cryptocurrency market price.
+  session_calendar: 24/7
+  session_calendar_role: configured normal session; observed valid-date bars outside are extended
+  session_calendar_limitations: Calendar rules are version-locked and must be checked against the provider/product
+    calendar during preflight; later exchange corrections require a dependency update.
+- canonical_symbol: US2Y_YIELD
+  canonical_name: U.S. Treasury 2-Year Constant Maturity Yield
+  enabled: true
+  required: true
+  asset_class: rates
+  subcategory: official_yield
+  instrument_type: yield
+  economic_exposure: U.S. Treasury 2-year constant maturity yield
+  provider: fred
+  provider_symbol: DGS2
+  exchange: Federal Reserve H.15 via FRED
+  exchange_timezone: America/New_York
+  currency: USD
+  price_unit: percent_per_annum
+  is_continuous: false
+  volume_type: unavailable
+  data_frequency: daily
+  maturity: 2Y
+  yield_type: constant_maturity_market_yield
+  data_licence: FRED terms and source attribution apply
+  redistribution_restrictions: Preserve source attribution
+  methodological_limitations: Daily estimate, not intraday; publication lag must be respected The collector requests
+    point-in-time FRED/ALFRED vintages and assigns conservative availability timestamps.
+- canonical_symbol: US5Y_YIELD
+  canonical_name: U.S. Treasury 5-Year Constant Maturity Yield
+  enabled: true
+  required: true
+  asset_class: rates
+  subcategory: official_yield
+  instrument_type: yield
+  economic_exposure: U.S. Treasury 5-year constant maturity yield
+  provider: fred
+  provider_symbol: DGS5
+  exchange: Federal Reserve H.15 via FRED
+  exchange_timezone: America/New_York
+  currency: USD
+  price_unit: percent_per_annum
+  is_continuous: false
+  volume_type: unavailable
+  data_frequency: daily
+  maturity: 5Y
+  yield_type: constant_maturity_market_yield
+  data_licence: FRED terms and source attribution apply
+  redistribution_restrictions: Preserve source attribution
+  methodological_limitations: Daily estimate, not intraday; publication lag must be respected The collector requests
+    point-in-time FRED/ALFRED vintages and assigns conservative availability timestamps.
+- canonical_symbol: US10Y_YIELD
+  canonical_name: U.S. Treasury 10-Year Constant Maturity Yield
+  enabled: true
+  required: true
+  asset_class: rates
+  subcategory: official_yield
+  instrument_type: yield
+  economic_exposure: U.S. Treasury 10-year constant maturity yield
+  provider: fred
+  provider_symbol: DGS10
+  exchange: Federal Reserve H.15 via FRED
+  exchange_timezone: America/New_York
+  currency: USD
+  price_unit: percent_per_annum
+  is_continuous: false
+  volume_type: unavailable
+  data_frequency: daily
+  maturity: 10Y
+  yield_type: constant_maturity_market_yield
+  data_licence: FRED terms and source attribution apply
+  redistribution_restrictions: Preserve source attribution
+  methodological_limitations: Daily estimate, not intraday; publication lag must be respected The collector requests
+    point-in-time FRED/ALFRED vintages and assigns conservative availability timestamps.
+- canonical_symbol: US30Y_YIELD
+  canonical_name: U.S. Treasury 30-Year Constant Maturity Yield
+  enabled: true
+  required: true
+  asset_class: rates
+  subcategory: official_yield
+  instrument_type: yield
+  economic_exposure: U.S. Treasury 30-year constant maturity yield
+  provider: fred
+  provider_symbol: DGS30
+  exchange: Federal Reserve H.15 via FRED
+  exchange_timezone: America/New_York
+  currency: USD
+  price_unit: percent_per_annum
+  is_continuous: false
+  volume_type: unavailable
+  data_frequency: daily
+  maturity: 30Y
+  yield_type: constant_maturity_market_yield
+  data_licence: FRED terms and source attribution apply
+  redistribution_restrictions: Preserve source attribution
+  methodological_limitations: Daily estimate, not intraday; publication lag must be respected The collector requests
+    point-in-time FRED/ALFRED vintages and assigns conservative availability timestamps.
+- canonical_symbol: UK2Y_YIELD
+  canonical_name: UK Government Nominal Spot Yield - 2 Year
+  enabled: true
+  required: false
+  asset_class: rates
+  subcategory: official_yield
+  instrument_type: yield
+  economic_exposure: UK nominal government spot yield at 2-year maturity
+  provider: boe_yield_curve
+  provider_symbol: GL_NOMINAL_2Y
+  exchange: Bank of England estimated gilt curve
+  exchange_timezone: Europe/London
+  currency: GBP
+  price_unit: percent_per_annum_continuously_compounded
+  is_continuous: false
+  volume_type: unavailable
+  data_frequency: daily
+  maturity: 2Y
+  yield_type: fitted_zero_coupon_spot_rate
+  data_licence: Bank of England copyright/disclaimer applies
+  redistribution_restrictions: Use and store only under Bank of England conditions
+  methodological_limitations: Fitted curve, daily and revisable; no API is offered by the Bank Historical archives
+    do not provide a reliable full vintage history; collected values receive retrieval-time availability and are
+    therefore prospective-only for leakage-safe research.
+- canonical_symbol: UK10Y_YIELD
+  canonical_name: UK Government Nominal Spot Yield - 10 Year
+  enabled: true
+  required: false
+  asset_class: rates
+  subcategory: official_yield
+  instrument_type: yield
+  economic_exposure: UK nominal government spot yield at 10-year maturity
+  provider: boe_yield_curve
+  provider_symbol: GL_NOMINAL_10Y
+  exchange: Bank of England estimated gilt curve
+  exchange_timezone: Europe/London
+  currency: GBP
+  price_unit: percent_per_annum_continuously_compounded
+  is_continuous: false
+  volume_type: unavailable
+  data_frequency: daily
+  maturity: 10Y
+  yield_type: fitted_zero_coupon_spot_rate
+  data_licence: Bank of England copyright/disclaimer applies
+  redistribution_restrictions: Use and store only under Bank of England conditions
+  methodological_limitations: Fitted curve, daily and revisable; no API is offered by the Bank Historical archives
+    do not provide a reliable full vintage history; collected values receive retrieval-time availability and are
+    therefore prospective-only for leakage-safe research.
+- canonical_symbol: DE2Y_YIELD
+  canonical_name: German Current Federal Treasury Note Yield - 2 Year
+  enabled: true
+  required: false
+  asset_class: rates
+  subcategory: official_yield
+  instrument_type: yield
+  economic_exposure: Current German two-year Federal Treasury note yield
+  provider: bundesbank
+  provider_symbol: BBSSY.D.REN.EUR.A610.000000WT0202.A
+  exchange: Deutsche Bundesbank
+  exchange_timezone: Europe/Berlin
+  currency: EUR
+  price_unit: percent_per_annum
+  is_continuous: false
+  volume_type: unavailable
+  data_frequency: daily
+  maturity: 2Y
+  yield_type: current_federal_security_yield
+  data_licence: Deutsche Bundesbank usage conditions apply
+  redistribution_restrictions: Preserve attribution and usage conditions
+  methodological_limitations: Yield of the current security, not a fitted constant-maturity series Historical archives
+    do not provide a reliable full vintage history; collected values receive retrieval-time availability and are
+    therefore prospective-only for leakage-safe research.
+- canonical_symbol: DE10Y_YIELD
+  canonical_name: German Current Federal Bond Yield - 10 Year
+  enabled: true
+  required: false
+  asset_class: rates
+  subcategory: official_yield
+  instrument_type: yield
+  economic_exposure: Current German ten-year federal bond yield
+  provider: bundesbank
+  provider_symbol: BBSSY.D.REN.EUR.A630.000000WT1010.A
+  exchange: Deutsche Bundesbank
+  exchange_timezone: Europe/Berlin
+  currency: EUR
+  price_unit: percent_per_annum
+  is_continuous: false
+  volume_type: unavailable
+  data_frequency: daily
+  maturity: 10Y
+  yield_type: current_federal_security_yield
+  data_licence: Deutsche Bundesbank usage conditions apply
+  redistribution_restrictions: Preserve attribution and usage conditions
+  methodological_limitations: Yield of the current security, not a fitted constant-maturity series Historical archives
+    do not provide a reliable full vintage history; collected values receive retrieval-time availability and are
+    therefore prospective-only for leakage-safe research.
