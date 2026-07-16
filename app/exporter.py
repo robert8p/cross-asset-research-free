@@ -100,6 +100,19 @@ def align_bars_without_fill(bars: pd.DataFrame, frequency: str = "5min") -> pd.D
     selected = [column for column in research_columns if column in bars.columns]
     raw = bars[selected].copy()
     raw["bar_open_timestamp_utc"] = pd.to_datetime(raw["bar_open_timestamp_utc"], utc=True)
+
+    # PostgreSQL NUMERIC columns are returned by psycopg as decimal.Decimal objects.
+    # Pandas preserves those as object dtype, which cannot safely be mixed with Python
+    # float literals during return calculations. Convert only the compact research
+    # dataset's numeric fields to float64; the raw export remains source-faithful.
+    numeric_columns = [
+        "close", "volume", "vwap", "trade_count",
+        "minutes_since_session_open", "minutes_until_session_close",
+    ]
+    for column in numeric_columns:
+        if column in raw.columns:
+            raw[column] = pd.to_numeric(raw[column], errors="coerce").astype("float64")
+
     symbols = sorted(raw["canonical_symbol"].dropna().astype(str).unique())
     grid_start = raw["bar_open_timestamp_utc"].min().floor(frequency)
     grid_end = raw["bar_open_timestamp_utc"].max().floor(frequency) + pd.Timedelta(frequency)
@@ -118,7 +131,11 @@ def align_bars_without_fill(bars: pd.DataFrame, frequency: str = "5min") -> pd.D
     prior_close = aligned.groupby("canonical_symbol", observed=True)["close"].shift()
     exactly_adjacent = (aligned["bar_open_timestamp_utc"] - prior_timestamp) == pd.Timedelta(frequency)
     both_observed = aligned["close"].notna() & prior_close.notna()
-    aligned["return_5m"] = np.where(exactly_adjacent & both_observed, aligned["close"] / prior_close - 1.0, np.nan)
+    valid_return = exactly_adjacent & both_observed & prior_close.ne(0)
+    aligned["return_5m"] = np.nan
+    aligned.loc[valid_return, "return_5m"] = (
+        aligned.loc[valid_return, "close"] / prior_close.loc[valid_return] - 1.0
+    )
     return aligned
 
 
@@ -127,6 +144,9 @@ def build_curve_features(yields: pd.DataFrame) -> pd.DataFrame:
         return pd.DataFrame(columns=["availability_timestamp_utc"])
     df = yields.copy()
     df["observation_timestamp_utc"] = pd.to_datetime(df["observation_timestamp_utc"], utc=True)
+    # Yield values are also stored as PostgreSQL NUMERIC and may arrive as Decimal.
+    # Normalise them before curve arithmetic while preserving the raw yields export.
+    df["yield_value"] = pd.to_numeric(df["yield_value"], errors="coerce").astype("float64")
     wide = df.pivot_table(index="observation_timestamp_utc", columns="canonical_symbol", values="yield_value", aggfunc="last").sort_index()
     # Carry official observations forward only after their conservative availability timestamp.
     wide = wide.ffill()
