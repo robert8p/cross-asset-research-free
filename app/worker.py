@@ -92,6 +92,13 @@ def _steps(job_type: str) -> list[Step]:
         return [Step("Collecting the latest available observations", 50, ["incremental", "--history-days", "2"])]
     if job_type == "preflight":
         return [Step("Checking every connection and instrument", 50, ["preflight"])]
+    if job_type == "round2":
+        return [
+            Step("Backfilling the disjoint one-year Round 2 history", 70, ["round2-backfill"]),
+            Step("Creating and securely uploading the Round 2 package", 95, ["round2-export"]),
+        ]
+    if job_type == "round2_export_only":
+        return [Step("Creating and securely uploading the Round 2 package", 95, ["round2-export"])]
     raise ValueError(f"Unsupported job type: {job_type}")
 
 
@@ -144,6 +151,8 @@ def _recover_interrupted() -> None:
                 """update control_jobs
                    set status='queued',
                        job_type = case
+                           when job_type in ('round2','round2_export_only') and (progress_percent >= 95 or current_step like 'Creating and securely uploading the Round 2%') then 'round2_export_only'
+                           when job_type in ('round2','round2_export_only') then 'round2'
                            when progress_percent >= 95 or current_step like 'Creating and securely uploading%' then 'export_only'
                            when progress_percent >= 85 then 'quality_export'
                            when progress_percent >= 20 then 'resume_backfill'
@@ -217,6 +226,8 @@ def _execute(job_id: str, job_type: str) -> None:
             output, payload = _run_step(job_id, step, output)
             if payload and step.args[0] == "export":
                 metadata["export"] = payload
+            if payload and step.args[0] == "round2-export":
+                metadata["round2_export"] = payload
         _update(
             job_id,
             status="succeeded",

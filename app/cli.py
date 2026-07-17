@@ -16,6 +16,7 @@ from .exporter import Exporter
 from .logging_utils import configure_logging
 from .pipeline import Collector
 from .quality import evaluate_bars, evaluate_yields
+from .round2 import backfill as round2_backfill, create_export as round2_create_export
 from .storage import SupabaseStorageUploader
 
 
@@ -180,6 +181,18 @@ def cmd_smoke(args) -> int:
     return 0 if not batch.bars.empty else 1
 
 
+
+def cmd_round2_backfill(args) -> int:
+    result = round2_backfill(_database())
+    print(json.dumps(result, indent=2, default=str))
+    return 1 if result.get("failed") else 0
+
+
+def cmd_round2_export(args) -> int:
+    result = round2_create_export(_database())
+    print(json.dumps(result, indent=2, default=str))
+    return 0
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Cross-asset intraday market-data research collector")
     parser.add_argument("--log-level", default=os.getenv("LOG_LEVEL", "INFO"))
@@ -211,6 +224,8 @@ def build_parser() -> argparse.ArgumentParser:
     export.add_argument("--untouched-start", help="Explicit UTC cutoff; otherwise calculated from settings")
     export.add_argument("--no-full-archive", action="store_true")
 
+    sub.add_parser("round2-backfill")
+    sub.add_parser("round2-export")
     sub.add_parser("status")
     sub.add_parser("smoke-test")
     return parser
@@ -223,7 +238,9 @@ def main(argv: list[str] | None = None) -> int:
     commands = {
         "plan-dates": cmd_plan_dates, "migrate": cmd_migrate, "preflight": cmd_preflight,
         "backfill": lambda a: cmd_collect(a, False), "incremental": lambda a: cmd_collect(a, True),
-        "quality": cmd_quality, "export": cmd_export, "status": cmd_status, "smoke-test": cmd_smoke,
+        "quality": cmd_quality, "export": cmd_export,
+        "round2-backfill": cmd_round2_backfill, "round2-export": cmd_round2_export,
+        "status": cmd_status, "smoke-test": cmd_smoke,
     }
     return commands[args.command](args)
 

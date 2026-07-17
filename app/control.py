@@ -71,10 +71,16 @@ def set_setting(db: Database, key: str, value: str) -> None:
 
 
 def bootstrap() -> dict[str, Any]:
-    """Create schema and freeze a 90-day/30-day research split once."""
+    """Create schema once, then perform only lightweight startup reads.
+
+    The database may be busy with a long export when Render restarts the web
+    service. Replaying the complete DDL migration on every restart can block
+    behind that work and be cancelled by Supabase's statement timeout.
+    """
     db = Database(os.getenv("SUPABASE_DB_URL"))
     config = load_config()
-    db.apply_migration(config.root / "sql" / "001_init.sql")
+    if not db.schema_ready():
+        db.apply_migration(config.root / "sql" / "001_init.sql")
 
     settings = get_settings(db)
     if not all(settings.get(k) for k in (
@@ -94,7 +100,7 @@ def bootstrap() -> dict[str, Any]:
 
 
 def create_job(db: Database, job_type: str) -> str:
-    allowed = {"full_setup", "resume_backfill", "quality_export", "incremental", "preflight"}
+    allowed = {"full_setup", "resume_backfill", "quality_export", "incremental", "preflight", "round2", "round2_export_only"}
     if job_type not in allowed:
         raise ValueError(f"Unsupported job type: {job_type}")
     with db.connection() as conn:
@@ -284,8 +290,8 @@ class JobRunner:
 RUNNER = JobRunner()
 
 
-def latest_discovery_object(db: Database) -> str | None:
-    jobs = latest_jobs(db, limit=30)
+def _latest_object_containing(db: Database, marker: str) -> str | None:
+    jobs = latest_jobs(db, limit=50)
     for job in jobs:
         metadata = job.get("metadata_json") or {}
         if isinstance(metadata, str):
@@ -293,16 +299,24 @@ def latest_discovery_object(db: Database) -> str | None:
                 metadata = json.loads(metadata)
             except json.JSONDecodeError:
                 continue
-        uploads = ((metadata.get("export") or {}).get("storage_uploads") or [])
-        for upload in uploads:
-            object_name = str(upload.get("object", ""))
-            if "cross_asset_discovery_export_" in object_name:
-                return object_name
+        for section in ("export", "round2_export"):
+            uploads = ((metadata.get(section) or {}).get("storage_uploads") or [])
+            for upload in uploads:
+                object_name = str(upload.get("object", ""))
+                if marker in object_name:
+                    return object_name
     return None
 
 
-def signed_discovery_url(db: Database, expires_seconds: int = 3600) -> str | None:
-    object_name = latest_discovery_object(db)
+def latest_discovery_object(db: Database) -> str | None:
+    return _latest_object_containing(db, "cross_asset_discovery_export_")
+
+
+def latest_round2_object(db: Database) -> str | None:
+    return _latest_object_containing(db, "cross_asset_ROUND2_historical_corroboration_")
+
+
+def _signed_url_for_object(db: Database, object_name: str | None, expires_seconds: int = 3600) -> str | None:
     if not object_name:
         return None
     env = runtime_environment(db)
@@ -326,3 +340,11 @@ def signed_discovery_url(db: Database, expires_seconds: int = 3600) -> str | Non
     if path.startswith("http"):
         return path
     return f"{base}/storage/v1{path if path.startswith('/') else '/' + path}"
+
+
+def signed_discovery_url(db: Database, expires_seconds: int = 3600) -> str | None:
+    return _signed_url_for_object(db, latest_discovery_object(db), expires_seconds)
+
+
+def signed_round2_url(db: Database, expires_seconds: int = 3600) -> str | None:
+    return _signed_url_for_object(db, latest_round2_object(db), expires_seconds)

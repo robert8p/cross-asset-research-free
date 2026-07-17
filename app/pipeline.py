@@ -88,7 +88,7 @@ def checkpoint_resume_start(
     This prevents a newer prospective checkpoint from causing an older historical range
     to be skipped. The overlap re-fetches the boundary safely for roll detection/upserts.
     """
-    if job_type != "historical_backfill" or not checkpoint:
+    if job_type not in {"historical_backfill", "round2_historical_corroboration_backfill"} or not checkpoint:
         return requested_start
     metadata = checkpoint.get("metadata") or {}
     if metadata.get("job_type") != job_type:

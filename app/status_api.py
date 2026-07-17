@@ -12,7 +12,8 @@ from fastapi import Depends, FastAPI, HTTPException, status
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 
-from .control import bootstrap, create_job, get_settings, latest_discovery_object, latest_jobs, signed_discovery_url
+from .control import (bootstrap, create_job, get_settings, latest_discovery_object, latest_round2_object,
+                      latest_jobs, signed_discovery_url, signed_round2_url)
 from .db import Database
 
 security = HTTPBasic()
@@ -43,7 +44,7 @@ async def lifespan(_: FastAPI):
     yield
 
 
-app = FastAPI(title="Cross-Asset Research — No-Code Dashboard", version="1.3.0-worker", lifespan=lifespan)
+app = FastAPI(title="Cross-Asset Research — No-Code Dashboard", version="1.4-round2", lifespan=lifespan)
 
 
 @app.get("/health")
@@ -144,9 +145,9 @@ def _recent_runs(db: Database) -> str:
 def dashboard(_: str = Depends(_auth)):
     if BOOTSTRAP_ERROR:
         body = f"""
-        <h1>Setup needs one correction</h1>
-        <div class="alert bad-panel"><strong>The service could not connect or initialise.</strong><br>{html.escape(BOOTSTRAP_ERROR)}</div>
-        <p>Check the six values entered during Render deployment, then redeploy.</p>
+        <h1>The database is temporarily busy</h1>
+        <div class="alert bad-panel"><strong>The dashboard could not finish its lightweight startup check.</strong><br>{html.escape(BOOTSTRAP_ERROR)}</div>
+        <p>Wait one minute and refresh. If the message remains after the current worker step finishes, redeploy the latest commit once.</p>
         """
         return HTMLResponse(_page(body, refresh=False), status_code=503)
 
@@ -156,6 +157,7 @@ def dashboard(_: str = Depends(_auth)):
     active = any(j.get("status") in {"queued", "running"} for j in jobs)
     latest = jobs[0] if jobs else None
     discovery_ready = bool(latest_discovery_object(db))
+    round2_ready = bool(latest_round2_object(db))
 
     action_panel = ""
     if active:
@@ -163,12 +165,18 @@ def dashboard(_: str = Depends(_auth)):
         <div class="alert info"><strong>The system is working.</strong> You can close this page and return later. The database checkpoints protect completed work.</div>
         """
     elif discovery_ready:
-        action_panel = """
+        round2_action = (
+            '<a class="button primary" href="/download/round2">Download Round 2 package</a>'
+            if round2_ready else
+            "<form method='post' action='/run/round2' onsubmit=\"return confirm('Backfill the disjoint prior year and build Round 2?');\"><button class='button primary'>Build deeper Round 2 package</button></form>"
+        )
+        action_panel = f"""
         <div class="actions">
-          <a class="button primary" href="/download/discovery">Download discovery package</a>
+          <a class="button secondary" href="/download/discovery">Download Round 1 discovery package</a>
+          {round2_action}
           <form method="post" action="/run/incremental"><button class="button secondary">Collect latest data</button></form>
-          <form method="post" action="/run/quality-export"><button class="button secondary">Recreate export</button></form>
         </div>
+        <div class="alert info"><strong>Round 2 uses the disjoint year before Round 1.</strong> It targets your 14:00, 17:00 and 19:00 London decision times and does not open the existing test archive.</div>
         <div class="alert warning"><strong>Do not open the untouched-test archive.</strong> The dashboard intentionally provides no download button for it.</div>
         """
     elif latest and latest.get("status") == "failed":
@@ -280,6 +288,25 @@ def run_incremental(_: str = Depends(_auth)):
     return RedirectResponse(url="/", status_code=303)
 
 
+@app.post("/run/round2")
+def run_round2(_: str = Depends(_auth)):
+    db = Database(os.getenv("SUPABASE_DB_URL"))
+    create_job(db, "round2")
+    return RedirectResponse(url="/", status_code=303)
+
+
+@app.get("/download/round2")
+def download_round2(_: str = Depends(_auth)):
+    db = Database(os.getenv("SUPABASE_DB_URL"))
+    try:
+        url = signed_round2_url(db)
+    except Exception as exc:
+        raise HTTPException(status_code=502, detail=f"Could not create the secure Round 2 download link: {exc}") from exc
+    if not url:
+        raise HTTPException(status_code=404, detail="No Round 2 export has been uploaded yet")
+    return RedirectResponse(url=url, status_code=302)
+
+
 @app.post("/run/preflight")
 def run_preflight(_: str = Depends(_auth)):
     db = Database(os.getenv("SUPABASE_DB_URL"))
@@ -309,4 +336,5 @@ def api_status(_: str = Depends(_auth)):
         "settings": get_settings(db),
         "jobs": latest_jobs(db),
         "discovery_ready": bool(latest_discovery_object(db)),
+        "round2_ready": bool(latest_round2_object(db)),
     }
