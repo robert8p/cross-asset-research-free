@@ -70,16 +70,33 @@ def set_setting(db: Database, key: str, value: str) -> None:
         conn.commit()
 
 
+def _core_schema_ready(db: Database) -> bool:
+    """Check core tables directly, without depending on a particular db.py version."""
+    with db.connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                """select
+                       to_regclass('public.instruments'),
+                       to_regclass('public.market_bars'),
+                       to_regclass('public.system_settings'),
+                       to_regclass('public.control_jobs'),
+                       to_regclass('public.ingestion_runs'),
+                       to_regclass('public.export_runs')"""
+            )
+            return all(value is not None for value in cur.fetchone())
+
+
 def bootstrap() -> dict[str, Any]:
     """Create schema once, then perform only lightweight startup reads.
 
-    The database may be busy with a long export when Render restarts the web
-    service. Replaying the complete DDL migration on every restart can block
-    behind that work and be cancelled by Supabase's statement timeout.
+    This implementation deliberately does not call ``Database.schema_ready``.
+    That keeps the dashboard compatible with repositories upgraded by small
+    browser-uploaded patches where ``control.py`` and ``db.py`` may briefly be
+    on different versions.
     """
     db = Database(os.getenv("SUPABASE_DB_URL"))
     config = load_config()
-    if not db.schema_ready():
+    if not _core_schema_ready(db):
         db.apply_migration(config.root / "sql" / "001_init.sql")
 
     settings = get_settings(db)
